@@ -17,7 +17,7 @@ file 'MouseTest' => ['MouseTest.o', 'Mouse.o'] do
 end
 
 desc 'Run the test for Mouse'
-task :test do
+task :test => 'MouseTest' do
   sh './MouseTest'
 end
 
