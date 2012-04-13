@@ -54,7 +54,6 @@ mouse_move(CGPoint point) {
 
 bool
 mouse_move2(CGPoint point, double timeout) {
-  CGEventRef event = EVENT(kCGEventMouseMoved, point, kCGMouseButtonLeft);
-  POST(event);
+  POST(EVENT(kCGEventMouseMoved, point, kCGMouseButtonLeft));
   return true;
 }
