@@ -8,12 +8,12 @@ OBJ = SRC.ext 'o'
 task :default => 'Mouse.o'
 
 rule '.o' => '.c' do |fn|
-  sh "clang -c -o #{fn.name} #{fn.source} -Wall -Werror -pedantic -ObjC -fobj-gc -framework ApplicationServices"
+  sh "clang -o #{fn.name} -c #{fn.source} -Wall -Werror -pedantic"
 end
 
 desc 'Build the mouse tests'
 file 'MouseTest' => ['MouseTest.o', 'Mouse.o'] do
-  sh 'clang -o MouseTest MouseTest.o Mouse.o'
+  sh 'clang -o MouseTest MouseTest.o Mouse.o -framework ApplicationServices'
 end
 
 desc 'Run the test for Mouse'

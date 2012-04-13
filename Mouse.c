@@ -6,8 +6,7 @@
 //  Copyright (c) 2012 Mark Rada. All rights reserved.
 //
 
-#import <ApplicationServices/ApplicationServices.h>
-#import "Mouse.h"
+#include "Mouse.h"
 
 static const double FPS     = 120.0;
 static const double QUANTUM = 1 / FPS;
@@ -45,7 +44,7 @@ static const double QUANTUM = 1 / FPS;
 
 CGPoint
 mouse_position() {
-  return CGEventGetLocation(CGEventCreate(nil));
+  return CGEventGetLocation(CGEventCreate(NULL));
 }
 
 bool
