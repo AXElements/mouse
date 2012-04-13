@@ -1,2 +1,5 @@
 *.o
+MouseTest
+*.plist
+*.bundle
 
