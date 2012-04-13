@@ -20,3 +20,8 @@ desc 'Run the test for Mouse'
 task :test do
   sh './MouseTest'
 end
+
+desc 'Run the Clang static analyzer'
+task :analyze do
+  sh 'clang --analyze Mouse.c'
+end
