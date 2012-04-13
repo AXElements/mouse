@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Mark Rada. All rights reserved.
 //
 
-#import <ApplicationServices/ApplicationServices.h>
-
-CGPoint mouse_current_position();
-bool    mouse_move_to(CGPoint);
-bool    mouse_move_to(CGPoint,double);
+CGPoint mouse_position();
+bool    mouse_move(CGPoint point);
+bool    mouse_move2(CGPoint point, double duration);
