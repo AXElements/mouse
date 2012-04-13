@@ -6,6 +6,7 @@
 static void
 run_test(CGPoint point) {
   mouse_move(point);
+  usleep(10000);
   assert(mouse_position().x == point.x);
   assert(mouse_position().y == point.y);
 }
