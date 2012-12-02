@@ -1,4 +1,8 @@
-unless RUBY_ENGINE == 'macruby'
+if RUBY_ENGINE == 'macruby'
+
+  framework '/System/Library/Frameworks/CoreGraphics.framework'
+
+else
 
   class CGPoint < Struct.new(:x, :y)
 
@@ -9,6 +13,7 @@ unless RUBY_ENGINE == 'macruby'
     def inspect
       "#<CGPoint x=#{self[:x]} y=#{self[:y]}>"
     end
+
   end
 
 end
