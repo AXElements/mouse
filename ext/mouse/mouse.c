@@ -8,7 +8,7 @@ static
 VALUE
 rb_mouse_wrap_point(CGPoint point)
 {
-  return rb_struct_new(rb_cCGPoint, rb_float_new(point.x), rb_float_new(point.y));
+  return rb_struct_new(rb_cCGPoint, DBL2NUM(point.x), DBL2NUM(point.y));
 }
 
 static
