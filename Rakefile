@@ -30,7 +30,7 @@ Gem::PackageTask.new(mouse_spec) { }
 desc 'Build and install gem (not including deps)'
 task :install => :gem do
   require 'rubygems/installer'
-  Gem::Installer.new("pkg/#{ax_elements.file_name}").install
+  Gem::Installer.new("pkg/#{mouse_spec.file_name}").install
 end
 
 require 'rake/extensiontask'
