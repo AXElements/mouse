@@ -2,4 +2,4 @@
 MouseTest
 *.plist
 *.bundle
-
+tmp/

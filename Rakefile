@@ -25,3 +25,16 @@ desc 'Run the Clang static analyzer'
 task :analyze do
   sh 'clang --analyze Mouse.c'
 end
+
+desc 'Startup an IRb console with Mouse loaded'
+task :console => [:compile] do
+  sh 'irb -Ilib -rmouse'
+end
+
+# Gem stuff
+
+require 'rubygems/specification'
+MOUSE_SPEC = Gem::Specification.load('mouse.gemspec')
+
+require 'rake/extensiontask'
+Rake::ExtensionTask.new('mouse', MOUSE_SPEC)
