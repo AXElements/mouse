@@ -5,10 +5,10 @@
 
 static void
 run_test(CGPoint point) {
-  mouse_move(point);
+  mouse_move_to(point);
   usleep(10000);
-  assert(mouse_position().x == point.x);
-  assert(mouse_position().y == point.y);
+  assert(mouse_current_position().x - point.x < 1);
+  assert(mouse_current_position().y - point.y < 1);
 }
 
 int
