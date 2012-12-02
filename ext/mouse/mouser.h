@@ -1,5 +1,5 @@
 //
-//  Mouse.h
+//  Mouser.h
 //  MRMouse
 //
 //  Created by Mark Rada on 12-03-17.
@@ -10,7 +10,8 @@
 
 enum MouseMovementUnit {
   kMouseScrollByLine  = kCGScrollEventUnitLine,
-  kMouseScrollByPixel = kCGScrollEventUnitPixel // not actually pixels, but same idea
+  // TODO: might not be real pixels, might be Cocoa co-ords, need to investigate
+  kMouseScrollByPixel = kCGScrollEventUnitPixel
 };
 
 
