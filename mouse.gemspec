@@ -20,7 +20,8 @@ Originally extracted from the AXElements project.
 
   s.extensions  = ['ext/mouse/extconf.rb']
   s.files       = Dir.glob('lib/**/*.rb') +
-                  Dir.glob('ext/**/*.{c,h,rb}')
+                  Dir.glob('ext/**/*.{c,h,rb}') +
+                  ['Rakefile', 'README.markdown', '.yardopts']
   s.test_files  = Dir.glob('test/**/test_*.rb') + [ 'test/helper.rb' ]
 
   s.add_runtime_dependency 'ffi', '~> 1.2.0'

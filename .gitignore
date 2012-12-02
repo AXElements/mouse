@@ -3,3 +3,6 @@ MouseTest
 *.plist
 *.bundle
 tmp/
+.yardoc/
+doc/
+
