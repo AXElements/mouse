@@ -24,8 +24,6 @@ Originally extracted from the AXElements project.
                   ['Rakefile', 'README.markdown', '.yardopts']
   s.test_files  = Dir.glob('test/**/test_*.rb') + [ 'test/helper.rb' ]
 
-  s.add_runtime_dependency 'ffi', '~> 1.2.0'
-
   s.add_development_dependency 'yard', '~> 0.8.3'
   s.add_development_dependency 'kramdown', '~> 0.14.1'
   s.add_development_dependency 'rake-compiler', '~> 0.8.1'
