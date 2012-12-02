@@ -27,19 +27,32 @@ rb_mouse_unwrap_point(VALUE point)
   return CGPointMake(x, y);
 }
 
+/***
+ * Returns the current co-ordinates of the Mouse
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_current_position(VALUE self)
 {
-  return rb_mouse_wrap_point(mouse_current_position());
+  return CURRENT_POSITION;
 }
 
+/***
+ * Move the cursor to the given co-ordinates
+ *
+ * @param point [CGPoint,Array(Number,Number),#to_point]
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_move_to(VALUE self, VALUE point)
 {
   mouse_move_to(rb_mouse_unwrap_point(point));
-  return rb_mouse_wrap_point(mouse_current_position());
+  return CURRENT_POSITION;
+}
+
 /***
  * Drag the cursor to the given co-ordinates
  *
