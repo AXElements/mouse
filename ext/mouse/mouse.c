@@ -21,6 +21,7 @@ static
 CGPoint
 rb_mouse_unwrap_point(VALUE point)
 {
+  point = rb_funcall(point, sel_to_point, 0);
   double x = NUM2DBL(rb_struct_getmember(point, sel_x));
   double y = NUM2DBL(rb_struct_getmember(point, sel_y));
   return CGPointMake(x, y);
