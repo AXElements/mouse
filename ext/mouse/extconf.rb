@@ -4,7 +4,8 @@ $CFLAGS << ' -std=c99 -Wall -Werror -pedantic'
 $LIBS   << ' -framework Foundation -framework ApplicationServices -framework CoreGraphics'
 
 if RUBY_ENGINE == 'macruby'
-  $CFLAGS << ' -fobjc-gc'
+  $LIBS << ' -framework Cocoa'
+  $CFLAGS << ' -ObjC -fobjc-gc'
 else
   unless RbConfig::CONFIG["CC"].match /clang/
     clang = `which clang`.chomp

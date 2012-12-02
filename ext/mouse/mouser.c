@@ -10,7 +10,7 @@
 #include "mouser.h"
 
 static const double FPS              = 120.0;
-static const double QUANTUM          = 1 / FPS;
+static const double QUANTUM          = 1 / 120; // Should be (1 / FPS), but gcc sucks
 static const double DEFAULT_DURATION = 0.2; // seconds
 
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
@@ -20,7 +20,12 @@ static const double DEFAULT_DURATION = 0.2; // seconds
 #define CLOSE_ENOUGH(a,b) ((pow(a.x-b.x,2)+pow(a.y-b.y,2)) <= 1.0)
 #define NOW (CFDateCreate(nil,CFAbsoluteTimeGetCurrent()))
 
+#ifdef NOT_MACRUBY
 #define RELEASE(x) CFRelease(x)
+#else
+#define RELEASE(x) CFMakeCollectable(x)
+#endif
+
 #define POSTRELEASE(x) do {			\
   CGEventRef event = x;  	 		\
   POST(event);					\

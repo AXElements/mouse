@@ -7,6 +7,7 @@ static ID sel_x;
 static ID sel_y;
 static ID sel_to_point;
 static ID sel_to_i;
+static ID sel_new;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -14,7 +15,11 @@ static
 VALUE
 rb_mouse_wrap_point(CGPoint point)
 {
+#if NOT_MACRUBY
   return rb_struct_new(rb_cCGPoint, DBL2NUM(point.x), DBL2NUM(point.y));
+#else
+  return rb_funcall(rb_cCGPoint, sel_new, 2, DBL2NUM(point.x), DBL2NUM(point.y));
+#endif
 }
 
 static
@@ -22,9 +27,18 @@ CGPoint
 rb_mouse_unwrap_point(VALUE point)
 {
   point = rb_funcall(point, sel_to_point, 0);
+
+#if NOT_MACRUBY
   double x = NUM2DBL(rb_struct_getmember(point, sel_x));
   double y = NUM2DBL(rb_struct_getmember(point, sel_y));
   return CGPointMake(x, y);
+
+#else
+  CGPoint* ptr;
+  Data_Get_Struct(point, CGPoint, ptr);
+  return *ptr;
+
+#endif
 }
 
 /***
@@ -90,6 +104,7 @@ Init_mouse()
   sel_y = rb_intern("y");
   sel_to_point = rb_intern("to_point");
   sel_to_i     = rb_intern("to_i");
+  sel_new = rb_intern("new");
 
   rb_mMouse = rb_define_module("Mouse");
   rb_funcall(rb_mMouse, rb_intern("extend"), 1, rb_mMouse);
