@@ -4,7 +4,9 @@ A port of mouse.rb from [AXElements](http://github.com/Marketcircle/AXElements),
 but cleaned up and rewritten in C to be more portable across languages and
 runtimes.
 
-Not much to see right now.
+## Examples
+
+TODO :P
 
 ## Copyright
 
@@ -34,5 +36,3 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
