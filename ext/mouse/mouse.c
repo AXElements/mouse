@@ -84,8 +84,10 @@ rb_mouse_drag_to(VALUE self, VALUE point)
 /***
  * Generate `amount` scroll events at the current cursor position
  *
+ * Returns number of lines scrolled.
+ *
  * @param amount [Number]
- * @return [CGPoint]
+ * @return [Number]
  */
 static
 VALUE
@@ -93,6 +95,81 @@ rb_mouse_scroll(VALUE self, VALUE amount)
 {
   amount = rb_funcall(amount, sel_to_i, 0);
   mouse_scroll(NUM2SIZET(amount));
+  return amount;
+}
+
+static
+VALUE
+rb_mouse_click_down(VALUE self)
+{
+  mouse_click_down();
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_click_up(VALUE self)
+{
+  mouse_click_up();
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_click(VALUE self)
+{
+  mouse_click();
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_secondary_click(VALUE self)
+{
+  mouse_secondary_click();
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_arbitrary_click(VALUE self, VALUE button)
+{
+  button = rb_funcall(button, sel_to_i, 0);
+  mouse_arbitrary_click(NUM2UINT(button));
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_middle_click(VALUE self)
+{
+  mouse_middle_click();
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_multi_click(VALUE self, VALUE num_clicks)
+{
+  // TODO: there has got to be a more idiomatic way to do this coercion
+  num_clicks = rb_funcall(num_clicks, sel_to_i, 0);
+  mouse_multi_click(NUM2SIZET(num_clicks));
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_double_click(VALUE self)
+{
+  mouse_double_click();
+  return CURRENT_POSITION;
+}
+
+static
+VALUE
+rb_mouse_triple_click(VALUE self)
+{
+  mouse_triple_click();
   return CURRENT_POSITION;
 }
 
@@ -113,4 +190,13 @@ Init_mouse()
   rb_define_method(rb_mMouse, "move_to",          rb_mouse_move_to,          1);
   rb_define_method(rb_mMouse, "drag_to",          rb_mouse_drag_to,          1);
   rb_define_method(rb_mMouse, "scroll",           rb_mouse_scroll,           1);
+  rb_define_method(rb_mMouse, "click_down",       rb_mouse_click_down,       0);
+  rb_define_method(rb_mMouse, "click_up",         rb_mouse_click_up,         0);
+  rb_define_method(rb_mMouse, "click",            rb_mouse_click,            0);
+  rb_define_method(rb_mMouse, "secondary_click",  rb_mouse_secondary_click,  0);
+  rb_define_method(rb_mMouse, "arbitrary_click",  rb_mouse_arbitrary_click,  1);
+  rb_define_method(rb_mMouse, "middle_click",     rb_mouse_middle_click,     0);
+  rb_define_method(rb_mMouse, "multi_click",      rb_mouse_multi_click,      1);
+  rb_define_method(rb_mMouse, "double_click",     rb_mouse_double_click,     0);
+  rb_define_method(rb_mMouse, "triple_click",     rb_mouse_triple_click,     0);
 }
