@@ -1,12 +1,22 @@
 if RUBY_ENGINE == 'macruby'
 
+  # A workaround that guarantees that `CGPoint` is defined
   framework '/System/Library/Frameworks/CoreGraphics.framework'
 
 else
 
   ##
-  #
+  # A structure that contains a point in a two-dimensional coordinate system
   class CGPoint < Struct.new(:x, :y)
+
+    # @!attribute [rw] x
+    #   The `x` co-ordinate of the screen point
+    #   @return [Number]
+
+    # @!attribute [rw] y
+    #   The `y` co-ordinate of the screen point
+    #   @return [Number]
+
     ##
     # Return a nice string representation of the point
     #
@@ -16,13 +26,11 @@ else
     def inspect
       "#<CGPoint x=#{self[:x]} y=#{self[:y]}>"
     end
+
   end
 
 end
 
-
-##
-# Mouse extensions to `CGPoint`
 class CGPoint
   ##
   # Returns the receiver, since the receiver is already a {CGPoint}
