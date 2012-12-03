@@ -41,8 +41,8 @@ rb_mouse_unwrap_point(VALUE point)
 #endif
 }
 
-/***
- * Returns the current co-ordinates of the Mouse
+/*
+ * Returns the current co-ordinates of the mouse cursor
  *
  * @return [CGPoint]
  */
@@ -53,8 +53,8 @@ rb_mouse_current_position(VALUE self)
   return CURRENT_POSITION;
 }
 
-/***
- * Move the cursor to the given co-ordinates
+/*
+ * Move the mouse cursor to the given co-ordinates
  *
  * @param point [CGPoint,Array(Number,Number),#to_point]
  * @return [CGPoint]
@@ -67,8 +67,8 @@ rb_mouse_move_to(VALUE self, VALUE point)
   return CURRENT_POSITION;
 }
 
-/***
- * Drag the cursor to the given co-ordinates
+/*
+ * Drag the mouse cursor to the given co-ordinates
  *
  * @param point [CGPoint,Array(Number,Number),#to_point]
  * @return [CGPoint]
@@ -81,7 +81,7 @@ rb_mouse_drag_to(VALUE self, VALUE point)
   return CURRENT_POSITION;
 }
 
-/***
+/*
  * Generate `amount` scroll events at the current cursor position
  *
  * Returns number of lines scrolled.
@@ -98,6 +98,14 @@ rb_mouse_scroll(VALUE self, VALUE amount)
   return amount;
 }
 
+/*
+ * Generate the down click part of a click event at the current position
+ *
+ * This might be useful in concert with {Mouse.click_up} if you want
+ * to inject some behaviour between the down and up click events.
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_click_down(VALUE self)
@@ -106,6 +114,14 @@ rb_mouse_click_down(VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Generate the up click part of a click event at the current position
+ *
+ * This might be useful in concert with {Mouse.click_down} if you want
+ * to inject some behaviour between the down and up click events.
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_click_up(VALUE self)
@@ -114,6 +130,11 @@ rb_mouse_click_up(VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Generate a regular click event at the current mouse position
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_click(VALUE self)
@@ -122,6 +143,13 @@ rb_mouse_click(VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Generate a secondary click at the current mouse position
+ *
+ * Secondary click is often referred to as "right click".
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_secondary_click(VALUE self)
@@ -130,6 +158,23 @@ rb_mouse_secondary_click(VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Generate a click using an arbitrary mouse button at the current position
+ *
+ * Numbers are used to map the mouse buttons. At the time of writing,
+ * the documented values are:
+ *
+ *  - `kCGMouseButtonLeft   = 0`
+ *  - `kCGMouseButtonRight  = 1`
+ *  - `kCGMouseButtonCenter = 2`
+ *
+ * And the rest are not documented! Though they should be easy enough
+ * to figure out. See the `CGMouseButton` enum in the reference
+ * documentation for the most up to date list.
+ *
+ * @param button [Number,#to_i]
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_arbitrary_click(VALUE self, VALUE button)
@@ -139,6 +184,13 @@ rb_mouse_arbitrary_click(VALUE self, VALUE button)
   return CURRENT_POSITION;
 }
 
+/*
+ * Generate a click event for the middle mouse button at the current position
+ *
+ * It doesn't matter if you don't have a middle mouse button.
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_middle_click(VALUE self)
@@ -147,6 +199,15 @@ rb_mouse_middle_click(VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Generate a multi-click event at the current mouse position
+ *
+ * Unlike {Mouse.double_click} and {Mouse.triple_click} this will generate
+ * a single event with the given number of clicks.
+ *
+ * @param num_clicks [Number,#to_i]
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_multi_click(VALUE self, VALUE num_clicks)
@@ -157,6 +218,15 @@ rb_mouse_multi_click(VALUE self, VALUE num_clicks)
   return CURRENT_POSITION;
 }
 
+/*
+ * Perform a double click at the given mouse position
+ *
+ * Implemented by first generating a single click, and then a double click.,
+ * Apps seem to respond more consistently to this behaviour since that is
+ * how a human would have to generate a double click event.
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_double_click(VALUE self)
@@ -165,6 +235,16 @@ rb_mouse_double_click(VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Perform a triple click at the given mouse position
+ *
+ * Implemented by first generating a single click, then a double click,
+ * and finally a triple click. Apps seem to respond more consistently to
+ * this behaviour since that is how a human would have to generate a
+ * triple click event.
+ *
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_triple_click(VALUE self)
@@ -176,14 +256,24 @@ rb_mouse_triple_click(VALUE self)
 void
 Init_mouse()
 {
+  // on either supported Ruby, this should be defined by now
   rb_cCGPoint = rb_const_get(rb_cObject, rb_intern("CGPoint"));
-  sel_x = rb_intern("x");
-  sel_y = rb_intern("y");
+
+  sel_x        = rb_intern("x");
+  sel_y        = rb_intern("y");
   sel_to_point = rb_intern("to_point");
   sel_to_i     = rb_intern("to_i");
-  sel_new = rb_intern("new");
+  sel_new      = rb_intern("new");
 
+  /*
+   * Document-module: Mouse
+   *
+   * Herp Derp TODO
+   *
+   * [Reference](http://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html)
+   */
   rb_mMouse = rb_define_module("Mouse");
+
   rb_funcall(rb_mMouse, rb_intern("extend"), 1, rb_mMouse);
 
   rb_define_method(rb_mMouse, "current_position", rb_mouse_current_position, 0);
