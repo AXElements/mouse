@@ -9,8 +9,8 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include "mouser.h"
 
-static const double FPS              = 120.0;
-static const double QUANTUM          = 1 / 120; // Should be (1 / FPS), but gcc sucks
+static const uint_t FPS              = 120;
+static const uint_t QUANTUM          = 1000000 / 120; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION = 0.2; // seconds
 
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
@@ -35,9 +35,9 @@ static const double DEFAULT_DURATION = 0.2; // seconds
 
 static
 void
-mouse_sleep(size_t quanta)
+mouse_sleep(uint_t quanta)
 {
-  sleep(quanta * QUANTUM);
+  usleep(quanta * QUANTUM);
 }
 
 CGPoint
@@ -175,7 +175,7 @@ mouse_scroll(size_t amount)
 
 
 void
-mouse_click_down3(CGPoint point, size_t sleep_quanta)
+mouse_click_down3(CGPoint point, uint_t sleep_quanta)
 {
   POSTRELEASE(NEW_EVENT(kCGEventLeftMouseDown, point, kCGMouseButtonLeft));
   mouse_sleep(sleep_quanta);
@@ -223,7 +223,7 @@ mouse_click()
 
 
 void
-mouse_secondary_click3(CGPoint point, size_t sleep_quanta)
+mouse_secondary_click3(CGPoint point, uint_t sleep_quanta)
 {
   CGEventRef base_event = NEW_EVENT(
 				    kCGEventRightMouseDown,
@@ -252,7 +252,7 @@ mouse_secondary_click()
 
 
 void
-mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, size_t sleep_quanta)
+mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_quanta)
 {
   CGEventRef base_event = NEW_EVENT(
 				    kCGEventOtherMouseDown,

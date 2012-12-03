@@ -8,6 +8,8 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
+typedef unsigned int uint_t;
+
 enum MouseMovementUnit {
   kMouseScrollByLine  = kCGScrollEventUnitLine,
   // TODO: might not be real pixels, might be Cocoa co-ords, need to investigate
@@ -29,7 +31,7 @@ void mouse_scroll3(size_t amount, enum MouseMovementUnit units, double duration)
 
 void mouse_click_down();
 void mouse_click_down2(CGPoint point);
-void mouse_click_down3(CGPoint point, size_t sleep_quanta);
+void mouse_click_down3(CGPoint point, uint_t sleep_quanta);
 
 void mouse_click_up();
 void mouse_click_up2(CGPoint point);
@@ -39,11 +41,11 @@ void mouse_click2(CGPoint point);
 
 void mouse_secondary_click();
 void mouse_secondary_click2(CGPoint point);
-void mouse_secondary_click3(CGPoint point, size_t sleep_quanta);
+void mouse_secondary_click3(CGPoint point, uint_t sleep_quanta);
 
 void mouse_arbitrary_click(CGEventMouseSubtype button);
 void mouse_arbitrary_click2(CGEventMouseSubtype button, CGPoint point);
-void mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, size_t sleep_quanta);
+void mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_quanta);
 
 void mouse_middle_click();
 void mouse_middle_click2(CGPoint point);

@@ -1,3 +1,6 @@
+# 0.1.0 - Full API
+
+  * Fixed animation timing (sleep(3) type coercion issue)
 # 0.0.1 - Initial Release
 
   * CRuby and MacRuby compatible
