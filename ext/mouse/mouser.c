@@ -9,8 +9,8 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include "mouser.h"
 
-static const uint_t FPS              = 120;
-static const uint_t QUANTUM          = 1000000 / 120; // should be FPS, but GCC sucks
+static const uint_t FPS              = 240;
+static const uint_t QUANTUM          = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION = 0.2; // seconds
 
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
@@ -62,7 +62,7 @@ mouse_animate(
 	      )
 {
   CFDateRef current_time = NULL;
-  CGPoint current_point = start_point;
+  CGPoint current_point  = start_point;
   double     xstep = (end_point.x - start_point.x) / (duration * FPS);
   double     ystep = (end_point.y - start_point.y) / (duration * FPS);
   CFDateRef  start = NOW;
@@ -187,8 +187,8 @@ mouse_click_down3(CGPoint point, uint_t sleep_quanta)
 void
 mouse_click_down2(CGPoint point)
 {
-  // TODO: replace constant 12 with something more abstract
-  mouse_click_down3(point, 12);
+  // TODO: replace constant 24 with something more abstract
+  mouse_click_down3(point, 24);
 }
 
 void
@@ -243,8 +243,8 @@ mouse_secondary_click3(CGPoint point, uint_t sleep_quanta)
 void
 mouse_secondary_click2(CGPoint point)
 {
-  // TODO: replace constant 12 with something more abstract
-  mouse_secondary_click3(point, 12);
+  // TODO: replace constant 24 with something more abstract
+  mouse_secondary_click3(point, 24);
 }
 
 void
@@ -271,7 +271,7 @@ mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_q
 void
 mouse_arbitrary_click2(CGEventMouseSubtype button, CGPoint point)
 {
-  mouse_arbitrary_click3(button, point, 12);
+  mouse_arbitrary_click3(button, point, 24);
 }
 
 void
