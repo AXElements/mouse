@@ -4,12 +4,14 @@ A port of mouse.rb from [AXElements](http://github.com/Marketcircle/AXElements),
 but cleaned up and rewritten in C to be more portable across languages and
 runtimes.
 
-By itself, the `mouse` gem is not that interesting; but in combination
+By itself, the `mouse` gem is not that useful; but in combination
 with a gem for discovering the positions of things (like buttons) on
 the screen, this gem is very powerful and can be used for tasks such
-as automated functional testing.
+as automated functional
+testing; this is the purpose of the
+[AXElements](http://github.com/Marketcircle/AXElements)   project.
 
-[Documentation](http://rdoc.info/gems/mouse/frames)
+[Mouse Documentation](http://rdoc.info/gems/mouse/frames)
 
 
 ## Examples
