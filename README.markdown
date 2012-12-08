@@ -52,7 +52,6 @@ change in the future if there are enough complaints.
 ## TODO
 
   * Support for mouse gestures
-  * Support arbitrarily small animation duration
   * Make animation duration accurate (currently naiveté has a bit of error)
 
 ## Copyright
