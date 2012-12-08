@@ -50,6 +50,7 @@ change in the future if there are enough complaints.
 ## TODO
 
   * Support for mouse gestures
+  * Support arbitrarily small animation duration
 
 
 ## Copyright
