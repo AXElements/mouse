@@ -268,7 +268,12 @@ Init_mouse()
   /*
    * Document-module: Mouse
    *
-   * Herp Derp TODO
+   * A module with methods that "tap" into the system input methods.
+   * This is done by wrapping wrapping around the CoreGraphics event
+   * taps API provided by OS X.
+   *
+   * The module provides a simple Ruby interface to performing mouse
+   * interactions such as moving and clicking.
    *
    * [Reference](http://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html)
    */
