@@ -1,5 +1,5 @@
 //
-//  Mouser.c
+//  Mouse.c
 //  MRMouse
 //
 //  Created by Mark Rada on 12-03-17.
@@ -7,7 +7,7 @@
 //
 
 #include <ApplicationServices/ApplicationServices.h>
-#include "mouser.h"
+#include "mouse.h"
 
 static const uint_t FPS              = 240;
 static const uint_t QUANTUM          = 1000000 / 240; // should be FPS, but GCC sucks

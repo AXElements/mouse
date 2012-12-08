@@ -1,4 +1,4 @@
-#include "mouser.h"
+#include "mouse.h"
 #include "ruby.h"
 
 static VALUE rb_mMouse;
@@ -443,7 +443,7 @@ rb_mouse_triple_click(int argc, VALUE *argv, VALUE self)
 }
 
 void
-Init_mouse()
+Init_cmouse()
 {
   // on either supported Ruby, this should be defined by now
   rb_cCGPoint = rb_const_get(rb_cObject, rb_intern("CGPoint"));

@@ -5,7 +5,7 @@ CLEAN.include '*.plist', '*.gch'
 
 desc 'Run the Clang static analyzer'
 task :analyze do
-  sh "clang --analyze ext/mouse/mouser.c"
+  sh "clang --analyze ext/cmouse/mouse.c"
 end
 
 desc 'Startup an IRb console with Mouse loaded'
@@ -35,4 +35,4 @@ task :install => :gem do
 end
 
 require 'rake/extensiontask'
-Rake::ExtensionTask.new('mouse', mouse_spec)
+Rake::ExtensionTask.new('cmouse', mouse_spec)

@@ -20,4 +20,4 @@ else
   $CFLAGS << ' -DNOT_MACRUBY'
 end
 
-create_makefile 'mouse/mouse'
+create_makefile 'cmouse/cmouse'
