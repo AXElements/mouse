@@ -17,7 +17,7 @@ static const double DEFAULT_DURATION = 0.2; // seconds
 #define POST(event) CGEventPost(kCGHIDEventTap, event)
 #define CHANGE(event,type) CGEventSetType(event, type)
 
-#define CLOSE_ENOUGH(a,b) ((pow(a.x-b.x,2)+pow(a.y-b.y,2)) <= 1.0)
+#define CLOSE_ENOUGH(a,b) ((abs(a.x - b.x) < 1.0) && (abs(a.y - b.y) < 1.0))
 #define NOW (CFDateCreate(nil,CFAbsoluteTimeGetCurrent()))
 
 #ifdef NOT_MACRUBY
