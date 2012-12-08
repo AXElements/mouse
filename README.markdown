@@ -11,7 +11,7 @@ as automated functional
 testing; this is the purpose of the
 [AXElements](http://github.com/Marketcircle/AXElements) project.
 
-[Mouse Documentation](http://rdoc.info/gems/mouse/frames)
+[Documentation](http://rdoc.info/gems/mouse/frames)
 
 
 ## Examples
@@ -43,13 +43,13 @@ testing; this is the purpose of the
     Mouse.scroll 10, :pixels
     Mouse.scroll -10, :pixels
 
-You'll notice that when you ask the mouse to move to a specific
+See the [Mouse Documentation](http://rdoc.info/gems/mouse/Mouse) for
+more details.
+
+You may have noticed that when you ask the mouse to move to a specific
 location that it may not end up at the exact co-ordinates, but it will
 be close (distance of less than 1). This is by design, but that may
 change in the future if there are enough complaints.
-
-See the [Mouse Documentation](http://rdoc.info/gems/mouse/frames) for
-more details.
 
 
 ## TODO
