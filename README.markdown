@@ -4,9 +4,53 @@ A port of mouse.rb from [AXElements](http://github.com/Marketcircle/AXElements),
 but cleaned up and rewritten in C to be more portable across languages and
 runtimes.
 
+By itself, the `mouse` gem is not that interesting; but in combination
+with a gem for discovering the positions of things (like buttons) on
+the screen, this gem is very powerful and can be used for tasks such
+as automated functional testing.
+
+[Documentation](http://rdoc.info/gems/mouse/frames)
+
+
 ## Examples
 
-TODO :P
+    require 'mouse'
+
+    Mouse.current_position # => #<CGPoint x=873.2 y=345.0>
+
+    # positions can be given as a an array with two points, or a CGPoint
+    Mouse.move_to [10, 10]
+    Mouse.move_to CGPoint.new(10, 10)
+
+    # optionally specify how long it should take the mouse to move
+    Mouse.move_to [800, 300], 0.2
+
+    Mouse.click
+    Mouse.double_click
+    Mouse.triple_click
+
+    # secondary_click and right_click are aliases to the same method
+    Mouse.secondary_click
+    Mouse.right_click
+
+    # positive number scrolls up, negative number scrolls down
+    Mouse.scroll 10
+    Mouse.scroll -10
+
+    # optionally specify units for scroll amount, :pixel or :line
+    Mouse.scroll 10, :pixels
+    Mouse.scroll -10, :pixels
+
+You'll notice that when you ask the mouse to move to a specific
+location that it may not end up at the exact co-ordinates, but it will
+be close (distance of less than 1). This is by design, but that may
+change in the future if there are enough complaints.
+
+
+## TODO
+
+  * Support for mouse gestures
+
 
 ## Copyright
 
