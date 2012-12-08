@@ -8,6 +8,7 @@ static ID sel_y;
 static ID sel_to_point;
 static ID sel_to_i;
 static ID sel_new;
+static ID unit_pixel;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -107,19 +108,52 @@ rb_mouse_drag_to(int argc, VALUE *argv, VALUE self)
 }
 
 /*
+ * @note Scrolling by `:pixel` may not actually be by real pixels, but instead
+ *       correspond to Cocoa co-ords (I don't have a retina display, so I haven't
+ *       checked it out yet).
+ *
  * Generate `amount` scroll events at the current cursor position
  *
- * Returns number of lines scrolled.
+ * Returns number of lines scrolled. A positive `amount` will scroll up
+ * and a negative `amount` will scroll down.
+ *
+ * An invalid type of `units` will default to `:line`.
  *
  * @param amount [Number]
+ * @param units [Symbol] `:pixel` or `:line` (_default_: `:line` ) (__optional__)
  * @return [Number]
  */
 static
 VALUE
-rb_mouse_scroll(VALUE self, VALUE amount)
+rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
 {
-  amount = rb_funcall(amount, sel_to_i, 0);
-  mouse_scroll(NUM2SIZET(amount));
+  if (argc == 0 || argc > 3)
+    rb_raise(rb_eArgError, "scroll requires 1..3 arguments, you gave %d", argc);
+
+  VALUE  amount = rb_funcall(argv[0], sel_to_i, 0);
+  size_t amt    = NUM2SIZET(amount);
+
+  if (argc == 1)
+    mouse_scroll(NUM2SIZET(amt));
+
+  ID units = rb_to_id(argv[1]);
+
+  if (argc == 2) {
+    if (units == unit_pixel)
+      mouse_scroll2(amt, kCGScrollEventUnitPixel);
+    else
+      mouse_scroll2(amt, kCGScrollEventUnitLine);
+  }
+
+  if (argc == 3) {
+    double duration = NUM2DBL(argv[2]);
+
+    if (units == unit_pixel)
+      mouse_scroll3(amt, kCGScrollEventUnitPixel, duration);
+    else
+      mouse_scroll3(amt, kCGScrollEventUnitLine, duration);
+  }
+
   return amount;
 }
 
@@ -290,6 +324,8 @@ Init_mouse()
   sel_to_i     = rb_intern("to_i");
   sel_new      = rb_intern("new");
 
+  unit_pixel   = rb_intern("pixel");
+
   /*
    * Document-module: Mouse
    *
@@ -306,7 +342,6 @@ Init_mouse()
 
   rb_funcall(rb_mMouse, rb_intern("extend"), 1, rb_mMouse);
 
-  rb_define_method(rb_mMouse, "scroll",           rb_mouse_scroll,           1);
   rb_define_method(rb_mMouse, "click_down",       rb_mouse_click_down,       0);
   rb_define_method(rb_mMouse, "click_up",         rb_mouse_click_up,         0);
   rb_define_method(rb_mMouse, "click",            rb_mouse_click,            0);
@@ -319,4 +354,5 @@ Init_mouse()
   rb_define_method(rb_mMouse, "current_position", rb_mouse_current_position,  0);
   rb_define_method(rb_mMouse, "move_to",          rb_mouse_move_to,          -1);
   rb_define_method(rb_mMouse, "drag_to",          rb_mouse_drag_to,          -1);
+  rb_define_method(rb_mMouse, "scroll",           rb_mouse_scroll,           -1);
 }

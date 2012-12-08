@@ -10,13 +10,6 @@
 
 typedef unsigned int uint_t;
 
-enum MouseMovementUnit {
-  kMouseScrollByLine  = kCGScrollEventUnitLine,
-  // TODO: might not be real pixels, might be Cocoa co-ords, need to investigate
-  kMouseScrollByPixel = kCGScrollEventUnitPixel
-};
-
-
 CGPoint mouse_current_position();
 
 void mouse_move_to(CGPoint point);
@@ -26,8 +19,8 @@ void mouse_drag_to(CGPoint point);
 void mouse_drag_to2(CGPoint point, double duration);
 
 void mouse_scroll(size_t amount);
-void mouse_scroll2(size_t amount, enum MouseMovementUnit units);
-void mouse_scroll3(size_t amount, enum MouseMovementUnit units, double duration);
+void mouse_scroll2(size_t amount, CGScrollEventUnit units);
+void mouse_scroll3(size_t amount, CGScrollEventUnit units, double duration);
 
 void mouse_click_down();
 void mouse_click_down2(CGPoint point);
