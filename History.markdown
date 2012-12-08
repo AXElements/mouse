@@ -1,3 +1,9 @@
+# 1.0.0 - Port Completed
+
+  * Added optional `point` argument to all `Mouse` click methods
+  * Added duration argument to all `Mouse` methods that are animated
+  * Fix differences between MRI CGPoint and MacRuby CGPoint
+
 # 0.1.0 - The basic API
 
   * Fixed animation timing (sleep(3) type coercion issue)
