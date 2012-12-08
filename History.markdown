@@ -1,3 +1,7 @@
+# 1.0.1 - Rename
+
+  * Rename mouse.bundle to cmouse.bundle to avoid name conflict
+
 # 1.0.0 - Port Completed
 
   * Added optional `point` argument to all `Mouse` click methods
