@@ -83,14 +83,26 @@ rb_mouse_move_to(int argc, VALUE *argv, VALUE self)
 /*
  * Drag the mouse cursor to the given co-ordinates
  *
- * @param point [CGPoint,Array(Number,Number),#to_point]
+ * @param (see #move_to)
  * @return [CGPoint]
  */
 static
 VALUE
-rb_mouse_drag_to(VALUE self, VALUE point)
+rb_mouse_drag_to(int argc, VALUE *argv, VALUE self)
 {
-  mouse_drag_to(rb_mouse_unwrap_point(point));
+  switch (argc)
+    {
+    case 0:
+      rb_raise(rb_eArgError, "drag_to requires at least a one arg");
+      break;
+    case 1:
+      mouse_drag_to(rb_mouse_unwrap_point(argv[0]));
+      break;
+    case 2:
+    default:
+      mouse_drag_to2(rb_mouse_unwrap_point(argv[0]), NUM2DBL(argv[1]));
+    }
+
   return CURRENT_POSITION;
 }
 
@@ -294,7 +306,6 @@ Init_mouse()
 
   rb_funcall(rb_mMouse, rb_intern("extend"), 1, rb_mMouse);
 
-  rb_define_method(rb_mMouse, "drag_to",          rb_mouse_drag_to,          1);
   rb_define_method(rb_mMouse, "scroll",           rb_mouse_scroll,           1);
   rb_define_method(rb_mMouse, "click_down",       rb_mouse_click_down,       0);
   rb_define_method(rb_mMouse, "click_up",         rb_mouse_click_up,         0);
@@ -307,4 +318,5 @@ Init_mouse()
   rb_define_method(rb_mMouse, "triple_click",     rb_mouse_triple_click,     0);
   rb_define_method(rb_mMouse, "current_position", rb_mouse_current_position,  0);
   rb_define_method(rb_mMouse, "move_to",          rb_mouse_move_to,          -1);
+  rb_define_method(rb_mMouse, "drag_to",          rb_mouse_drag_to,          -1);
 }
