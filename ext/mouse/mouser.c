@@ -187,8 +187,7 @@ mouse_click_down3(CGPoint point, uint_t sleep_quanta)
 void
 mouse_click_down2(CGPoint point)
 {
-  // TODO: replace constant 24 with something more abstract
-  mouse_click_down3(point, 24);
+  mouse_click_down3(point, FPS / 10);
 }
 
 void
@@ -243,8 +242,7 @@ mouse_secondary_click3(CGPoint point, uint_t sleep_quanta)
 void
 mouse_secondary_click2(CGPoint point)
 {
-  // TODO: replace constant 24 with something more abstract
-  mouse_secondary_click3(point, 24);
+  mouse_secondary_click3(point, FPS / 10);
 }
 
 void
@@ -271,7 +269,7 @@ mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_q
 void
 mouse_arbitrary_click2(CGEventMouseSubtype button, CGPoint point)
 {
-  mouse_arbitrary_click3(button, point, 24);
+  mouse_arbitrary_click3(button, point, FPS / 10);
 }
 
 void
