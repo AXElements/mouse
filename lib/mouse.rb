@@ -30,7 +30,7 @@ else
     #
     # @return [String]
     def inspect
-      "#<CGPoint x=#{self[:x]} y=#{self[:y]}>"
+      "#<CGPoint x=#{self.x} y=#{self.y}>"
     end
 
   end
