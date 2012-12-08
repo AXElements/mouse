@@ -9,6 +9,12 @@ else
   # A structure that contains a point in a two-dimensional coordinate system
   class CGPoint < Struct.new(:x, :y)
 
+    # @param x [Number]
+    # @param y [Number]
+    def initialize x = 0.0, y = 0.0
+      super
+    end
+
     # @!attribute [rw] x
     #   The `x` co-ordinate of the screen point
     #   @return [Number]
