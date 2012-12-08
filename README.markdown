@@ -9,7 +9,7 @@ with a gem for discovering the positions of things (like buttons) on
 the screen, this gem is very powerful and can be used for tasks such
 as automated functional
 testing; this is the purpose of the
-[AXElements](http://github.com/Marketcircle/AXElements)   project.
+[AXElements](http://github.com/Marketcircle/AXElements) project.
 
 [Mouse Documentation](http://rdoc.info/gems/mouse/frames)
 
@@ -53,7 +53,7 @@ change in the future if there are enough complaints.
 
   * Support for mouse gestures
   * Support arbitrarily small animation duration
-
+  * Make animation duration accurate (currently naiveté has a bit of error)
 
 ## Copyright
 
