@@ -1,7 +1,7 @@
 require 'test/helper'
 
 class CGPointTest < MiniTest::Unit::TestCase
-  
+
   def test_attributes
     p = CGPoint.new
     assert_respond_to p, :x
@@ -16,7 +16,7 @@ class CGPointTest < MiniTest::Unit::TestCase
   def test_to_point
     p = CGPoint.new
     assert_same p, p.to_point
-    
+
     p = CGPoint.new 4, 2
     assert_same p, p.to_point
   end
@@ -40,8 +40,8 @@ class CGPointTest < MiniTest::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal '#<CGPoint x=1 y=2>', CGPoint.new(1, 2).inspect
-    assert_equal '#<CGPoint x=3 y=5>', CGPoint.new(3, 5).inspect
+    assert_match /Point x=1.0 y=2.0>/, CGPoint.new(1, 2).inspect
+    assert_match /Point x=3.0 y=5.0>/, CGPoint.new(3, 5).inspect
   end
 
 end
