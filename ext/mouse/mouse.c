@@ -235,7 +235,7 @@ rb_mouse_click(int argc, VALUE *argv, VALUE self)
       break;
     case 1:
     default:
-      mouse_click(rb_mouse_unwrap_point(argv[0]));
+      mouse_click2(rb_mouse_unwrap_point(argv[0]));
     }
 
   return CURRENT_POSITION;
