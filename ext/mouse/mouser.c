@@ -79,8 +79,11 @@ mouse_animate(
 
     mouse_sleep(1);
     current_time = NOW;
-    if (CFDateGetTimeIntervalSinceDate(NOW, start) > 5.0)
+
+    // this is a safety
+    if (CFDateGetTimeIntervalSinceDate(NOW, start) > (duration + 1))
       break;
+
     RELEASE(current_time);
     current_time = NULL;
 
