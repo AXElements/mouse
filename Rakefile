@@ -1,4 +1,4 @@
-task :default => :install
+task :default => :test
 
 require 'rake/clean'
 CLEAN.include '*.plist', '*.gch'
