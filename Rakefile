@@ -13,10 +13,10 @@ task :console => [:compile] do
   sh 'irb -Ilib -rmouse'
 end
 
-desc 'Run tests'
-task :test do
-  # @todo
-  ruby 'test/helper.rb'
+require 'rake/testtask'
+Rake::TestTask.new do |t|
+  t.libs << '.'
+  t.pattern = 'test/*_test.rb'
 end
 
 
