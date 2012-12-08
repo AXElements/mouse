@@ -1,3 +1,5 @@
+require 'mouse/version'
+
 if RUBY_ENGINE == 'macruby'
 
   framework 'AppKit'
