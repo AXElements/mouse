@@ -1,3 +1,7 @@
+# 1.0.2 - Re-renam
+
+  * Revert 1.0.1 changes
+
 # 1.0.1 - Rename
 
   * Rename mouse.bundle to cmouse.bundle to avoid name conflict
