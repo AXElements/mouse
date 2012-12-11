@@ -6,4 +6,5 @@ tmp/
 .yardoc/
 doc/
 pkg/
+.rbx/
 
