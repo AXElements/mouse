@@ -35,4 +35,7 @@ task :install => :gem do
 end
 
 require 'rake/extensiontask'
-Rake::ExtensionTask.new('mouse', mouse_spec)
+Rake::ExtensionTask.new('mouse', mouse_spec) do |t|
+  t.lib_dir = 'lib/mouse'
+end
+

@@ -66,4 +66,4 @@ class Array
   end
 end
 
-require 'mouse.bundle'
+require 'mouse/mouse'
