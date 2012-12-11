@@ -66,4 +66,4 @@ class Array
   end
 end
 
-require 'cmouse'
+require 'mouse.bundle'

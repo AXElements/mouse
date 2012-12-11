@@ -1,5 +1,5 @@
 //
-//  Mouse.h
+//  Mouser.h
 //  MRMouse
 //
 //  Created by Mark Rada on 12-03-17.
