@@ -1,3 +1,7 @@
+# 1.0.3 - Lion compat
+
+  * Add compatability with OS X 10.7
+
 # 1.0.2 - Re-renam
 
   * Revert 1.0.1 changes
