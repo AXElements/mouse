@@ -7,4 +7,5 @@ tmp/
 doc/
 pkg/
 .rbx/
+Gemfile.lock
 
