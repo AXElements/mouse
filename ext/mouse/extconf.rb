@@ -1,7 +1,8 @@
 require 'mkmf'
 
 $CFLAGS << ' -std=c99 -Wall -Werror -pedantic'
-$LIBS   << ' -framework Foundation -framework ApplicationServices -framework CoreGraphics'
+$LIBS   << ' -framework Foundation -framework ApplicationServices'
+$LIBS   << ' -framework CoreGraphics' unless `sw_vers -productVersion`.to_f == 10.7
 
 if RUBY_ENGINE == 'macruby'
   $LIBS << ' -framework Cocoa'
