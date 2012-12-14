@@ -14,7 +14,7 @@ else
 
   ##
   # A structure that contains a point in a two-dimensional coordinate system
-  class CGPoint < Struct.new(:x, :y)
+  CGPoint = Struct.new(:x, :y) do
 
     # @param x [Number]
     # @param y [Number]
