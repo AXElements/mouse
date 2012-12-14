@@ -5,7 +5,7 @@ if RUBY_ENGINE == 'macruby'
   framework 'AppKit'
 
   # A workaround that guarantees that `CGPoint` is defined
-  MOUNTAIN_LION_APPKIT_VERSION = 1187
+  MOUNTAIN_LION_APPKIT_VERSION ||= 1187
   if NSAppKitVersionNumber >= MOUNTAIN_LION_APPKIT_VERSION
     framework '/System/Library/Frameworks/CoreGraphics.framework'
   end
