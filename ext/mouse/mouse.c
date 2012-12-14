@@ -474,7 +474,7 @@ Init_mouse()
    */
   rb_mMouse = rb_define_module("Mouse");
 
-  rb_funcall(rb_mMouse, rb_intern("extend"), 1, rb_mMouse);
+  rb_extend_object(rb_mMouse, rb_mMouse);
 
   rb_define_method(rb_mMouse, "current_position", rb_mouse_current_position,  0);
   rb_define_method(rb_mMouse, "move_to",          rb_mouse_move_to,          -1);
