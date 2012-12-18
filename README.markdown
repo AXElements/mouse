@@ -1,4 +1,4 @@
-# MRMouse
+# mouse
 
 A port of mouse.rb from [AXElements](http://github.com/Marketcircle/AXElements),
 but cleaned up and rewritten in C to be more portable across languages and
