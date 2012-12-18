@@ -1,4 +1,4 @@
-# MRMouse
+# mouse
 
 A port of mouse.rb from [AXElements](http://github.com/Marketcircle/AXElements),
 but cleaned up and rewritten in C to be more portable across languages and
@@ -56,6 +56,7 @@ change in the future if there are enough complaints.
 
   * Support for mouse gestures
   * Make animation duration accurate (current naiveté has a bit of error)
+
 
 ## Copyright
 
