@@ -9,9 +9,10 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include "mouser.h"
 
-static const uint_t FPS              = 240;
-static const uint_t QUANTUM          = 1000000 / 240; // should be FPS, but GCC sucks
-static const double DEFAULT_DURATION = 0.2; // seconds
+static const uint_t FPS     = 240;
+static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
+static const double DEFAULT_DURATION      = 0.2; // seconds
+static const double DEFAULT_MAGNIFICATION = 2.0; // factor
 
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
 #define POST(event) CGEventPost(kCGHIDEventTap, event)
@@ -345,4 +346,54 @@ void
 mouse_triple_click()
 {
   mouse_triple_click2(mouse_current_position());
+}
+
+void
+mouse_smart_magnify2(CGPoint point)
+{
+}
+
+void
+mouse_smart_magnify()
+{
+  mouse_smart_magnify2(mouse_current_position());
+}
+
+void
+mouse_swipe2(int direction, double duration)
+{
+}
+
+void
+mouse_swipe(int direction)
+{
+  mouse_swipe2(direction, DEFAULT_DURATION);
+}
+
+void
+mouse_pinch3(int direction, double magnification, double duration)
+{
+}
+
+void
+mouse_pinch2(int direction, double magnification)
+{
+ mouse_pinch3(direction, magnification, DEFAULT_DURATION);
+}
+
+void
+mouse_pinch(int direction)
+{
+  mouse_pinch2(direction, DEFAULT_MAGNIFICATION);
+}
+
+void
+mouse_rotate2(int direction, double angle, double duration)
+{
+}
+
+void
+mouse_rotate(int direction, double angle)
+{
+  mouse_rotate2(direction, angle, DEFAULT_DURATION);
 }
