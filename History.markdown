@@ -1,3 +1,7 @@
+# 1.0.4 - Change the homepage
+
+  * Moved github project to be under the AXElements organization
+
 # 1.0.3 - Lion compat
 
   * Add compatability with OS X 10.7
