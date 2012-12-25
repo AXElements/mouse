@@ -15,9 +15,11 @@ if RUBY_ENGINE == 'macruby'
 
 else
 
+
   ##
   # A structure that contains a point in a two-dimensional coordinate system
-  CGPoint = Struct.new(:x, :y) do
+  CGPoint = Struct.new(:x, :y) unless defined? CGPoint
+  class CGPoint
 
     # @param x [Number]
     # @param y [Number]
