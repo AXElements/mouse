@@ -1,3 +1,8 @@
+# 1.0.6 - Boogs
+
+  * Fix `Mouse.scroll` assuming arguments always included units
+  * Fix `Mouse.scroll` assuming amount was always positive (d'oh)
+
 # 1.0.5 - Tweaks for AXElements
 
   * Coerce `CGPoint.new` arguments using `#to_f`
