@@ -1,3 +1,8 @@
+# 1.0.5 - Tweaks for AXElements
+
+  * Coerce `CGPoint.new` arguments using `#to_f`
+  * Do not redefine `CGPoint` if it is already defined
+
 # 1.0.4 - Change the homepage
 
   * Moved github project to be under the AXElements organization
