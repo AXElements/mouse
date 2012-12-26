@@ -148,7 +148,7 @@ mouse_drag_to(CGPoint point)
 
 
 void
-mouse_scroll3(size_t amount, CGScrollEventUnit units, double duration)
+mouse_scroll3(int amount, CGScrollEventUnit units, double duration)
 {
   size_t     steps = round(FPS * duration);
   double   current = 0.0;
@@ -165,13 +165,13 @@ mouse_scroll3(size_t amount, CGScrollEventUnit units, double duration)
 }
 
 void
-mouse_scroll2(size_t amount, CGScrollEventUnit units)
+mouse_scroll2(int amount, CGScrollEventUnit units)
 {
   mouse_scroll3(amount, units, DEFAULT_DURATION);
 }
 
 void
-mouse_scroll(size_t amount)
+mouse_scroll(int amount)
 {
   mouse_scroll2(amount, kCGScrollEventUnitLine);
 }

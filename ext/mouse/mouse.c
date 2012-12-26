@@ -9,6 +9,7 @@ static ID sel_to_point;
 static ID sel_to_i;
 static ID sel_new;
 static ID unit_pixel;
+static ID unit_line;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -118,8 +119,6 @@ rb_mouse_drag_to(int argc, VALUE *argv, VALUE self)
  * Returns number of lines scrolled. A positive `amount` will scroll up
  * and a negative `amount` will scroll down.
  *
- * An invalid type of `units` will default to `:line`.
- *
  * @param amount [Number]
  * @param units [Symbol] `:pixel` or `:line` (_default_: `:line` ) (__optional__)
  * @return [Number]
@@ -131,19 +130,23 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
   if (argc == 0 || argc > 3)
     rb_raise(rb_eArgError, "scroll requires 1..3 arguments, you gave %d", argc);
 
-  VALUE  amount = rb_funcall(argv[0], sel_to_i, 0);
-  size_t amt    = NUM2SIZET(amount);
+  VALUE amount = rb_funcall(argv[0], sel_to_i, 0);
+  int   amt    = NUM2INT(amount);
 
-  if (argc == 1)
-    mouse_scroll(NUM2SIZET(amt));
+  if (argc == 1) {
+    mouse_scroll(amt);
+    return amount;
+  }
 
   ID units = rb_to_id(argv[1]);
 
   if (argc == 2) {
     if (units == unit_pixel)
       mouse_scroll2(amt, kCGScrollEventUnitPixel);
-    else
+    else if (units == unit_line)
       mouse_scroll2(amt, kCGScrollEventUnitLine);
+    else
+      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
   }
 
   if (argc == 3) {
@@ -151,8 +154,10 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
 
     if (units == unit_pixel)
       mouse_scroll3(amt, kCGScrollEventUnitPixel, duration);
-    else
+    else if (units == unit_line)
       mouse_scroll3(amt, kCGScrollEventUnitLine, duration);
+    else
+      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
   }
 
   return amount;
@@ -456,6 +461,7 @@ Init_mouse()
   sel_new      = rb_intern("new");
 
   unit_pixel   = rb_intern("pixel");
+  unit_line    = rb_intern("line");
 
   /*
    * Document-module: Mouse

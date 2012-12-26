@@ -18,9 +18,9 @@ void mouse_move_to2(CGPoint point, double duration);
 void mouse_drag_to(CGPoint point);
 void mouse_drag_to2(CGPoint point, double duration);
 
-void mouse_scroll(size_t amount);
-void mouse_scroll2(size_t amount, CGScrollEventUnit units);
-void mouse_scroll3(size_t amount, CGScrollEventUnit units, double duration);
+void mouse_scroll(int amount);
+void mouse_scroll2(int amount, CGScrollEventUnit units);
+void mouse_scroll3(int amount, CGScrollEventUnit units, double duration);
 
 void mouse_click_down();
 void mouse_click_down2(CGPoint point);
