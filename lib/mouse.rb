@@ -24,7 +24,7 @@ else
     # @param x [Number]
     # @param y [Number]
     def initialize x = 0.0, y = 0.0
-      super
+      super x.to_f, y.to_f
     end
 
     # @!attribute [rw] x
