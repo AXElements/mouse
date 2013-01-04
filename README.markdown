@@ -56,6 +56,7 @@ change in the future if there are enough complaints.
 
   * Support for mouse gestures
   * Make animation duration accurate (current naiveté has a bit of error)
+  * Import test app and specialize so we can have better tests
 
 
 ## Copyright

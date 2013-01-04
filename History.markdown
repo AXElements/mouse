@@ -1,3 +1,20 @@
+# 1.1.0 - A bit more granularity
+
+  * Add `Mouse.secondary_click_down` and alias `Mouse.right_click_down`
+  * Add `Mouse.secondary_click_up` and alias `Mouse.right_click_up`
+  * Add `Mouse.arbitrary_click_down`
+  * Add `Mouse.arbitrary_click_up`
+
+# 1.0.6 - Boogs
+
+  * Fix `Mouse.scroll` assuming arguments always included units
+  * Fix `Mouse.scroll` assuming amount was always positive (d'oh)
+
+# 1.0.5 - Tweaks for AXElements
+
+  * Coerce `CGPoint.new` arguments using `#to_f`
+  * Do not redefine `CGPoint` if it is already defined
+
 # 1.0.4 - Change the homepage
 
   * Moved github project to be under the AXElements organization
