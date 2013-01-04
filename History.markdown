@@ -1,3 +1,10 @@
+# 1.1.0 - A bit more granularity
+
+  * Add `Mouse.secondary_click_down` and alias `Mouse.right_click_down`
+  * Add `Mouse.secondary_click_up` and alias `Mouse.right_click_up`
+  * Add `Mouse.arbitrary_click_down`
+  * Add `Mouse.arbitrary_click_up`
+
 # 1.0.6 - Boogs
 
   * Fix `Mouse.scroll` assuming arguments always included units
