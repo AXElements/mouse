@@ -6,7 +6,6 @@ static VALUE rb_cCGPoint;
 static ID sel_x;
 static ID sel_y;
 static ID sel_to_point;
-static ID sel_to_i;
 static ID sel_new;
 static ID unit_pixel;
 static ID unit_line;
@@ -130,12 +129,11 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
   if (argc == 0 || argc > 3)
     rb_raise(rb_eArgError, "scroll requires 1..3 arguments, you gave %d", argc);
 
-  VALUE amount = rb_funcall(argv[0], sel_to_i, 0);
-  int   amt    = NUM2INT(amount);
+  int amt = NUM2INT(argv[0]);
 
   if (argc == 1) {
     mouse_scroll(amt);
-    return amount;
+    return argv[0];
   }
 
   ID units = rb_to_id(argv[1]);
@@ -160,7 +158,7 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
       rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
   }
 
-  return amount;
+  return argv[0];
 }
 
 /*
@@ -305,7 +303,7 @@ rb_mouse_arbitrary_click(int argc, VALUE *argv, VALUE self)
     return Qnil;
   }
 
-  uint_t button = NUM2INT(rb_funcall(argv[0], sel_to_i, 0));
+  uint_t button = NUM2INT(argv[0]);
 
   switch (argc)
     {
@@ -372,7 +370,7 @@ rb_mouse_multi_click(int argc, VALUE *argv, VALUE self)
   }
 
   // TODO: there has got to be a more idiomatic way to do this coercion
-  size_t num_clicks = NUM2SIZET(rb_funcall(argv[0], sel_to_i, 0));
+  size_t num_clicks = NUM2SIZET(argv[0]);
 
   switch (argc)
     {
@@ -457,7 +455,6 @@ Init_mouse()
   sel_x        = rb_intern("x");
   sel_y        = rb_intern("y");
   sel_to_point = rb_intern("to_point");
-  sel_to_i     = rb_intern("to_i");
   sel_new      = rb_intern("new");
 
   unit_pixel   = rb_intern("pixel");
