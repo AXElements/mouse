@@ -246,6 +246,65 @@ rb_mouse_click(int argc, VALUE *argv, VALUE self)
 }
 
 /*
+ * Generate the down click part of a secondary/right click event
+ *
+ * This might be useful in concert with {Mouse.secondary_click_up} if
+ * you want to inject some behaviour between the down and up click
+ * events.
+ *
+ * You can optionally specify a point to click; the mouse cursor will
+ * instantly jump to the given point.
+ *
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_secondary_click_down(int argc, VALUE* argv, VALUE self)
+{
+  switch (argc)
+    {
+    case 0:
+      mouse_secondary_click_down();
+      break;
+    case 1:
+    default:
+      mouse_secondary_click_down2(rb_mouse_unwrap_point(argv[0]));
+    }
+
+  return CURRENT_POSITION;
+}
+
+/*
+ * Generate the up click part of a secondary/right click event
+ *
+ * This might be useful in concert with {Mouse.secondary_click_down} if
+ * you want to inject some behaviour between the down and up click events.
+ *
+ * You can optionally specify a point to click; the mouse cursor will
+ * instantly jump to the given point.
+ *
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_secondary_click_up(int argc, VALUE* argv, VALUE self)
+{
+  switch (argc)
+    {
+    case 0:
+      mouse_secondary_click_up();
+      break;
+    case 1:
+    default:
+      mouse_secondary_click_up2(rb_mouse_unwrap_point(argv[0]));
+    }
+
+  return CURRENT_POSITION;
+}
+
+/*
  * Generate a secondary click (both down and up events)
  *
  * Secondary click is often referred to as "right click".
@@ -268,6 +327,75 @@ rb_mouse_secondary_click(int argc, VALUE *argv, VALUE self)
     case 1:
     default:
       mouse_secondary_click2(rb_mouse_unwrap_point(argv[0]));
+    }
+
+  return CURRENT_POSITION;
+}
+
+/*
+ * Generate the down click part of an arbitrary click event
+ *
+ * This might be useful in concert with {Mouse.arbitrary_click_up} if
+ * you want to inject some behaviour between the down and up click
+ * events.
+ *
+ * You can optionally specify a point to click; the mouse cursor will
+ * instantly jump to the given point.
+ *
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_arbitrary_click_down(int argc, VALUE* argv, VALUE self)
+{
+  if (argc == 0)
+    rb_raise(rb_eArgError, "arbitrary_click_down requires at least one arg");
+
+  uint_t button = NUM2INT(argv[0]);
+
+  switch (argc)
+    {
+    case 1:
+      mouse_arbitrary_click_down(button);
+      break;
+    case 2:
+    default:
+      mouse_arbitrary_click_down2(button, rb_mouse_unwrap_point(argv[1]));
+    }
+
+  return CURRENT_POSITION;
+}
+
+/*
+ * Generate the up click part of an arbitrary click event
+ *
+ * This might be useful in concert with {Mouse.arbitrary_click_down} if
+ * you want to inject some behaviour between the down and up click events.
+ *
+ * You can optionally specify a point to click; the mouse cursor will
+ * instantly jump to the given point.
+ *
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_arbitrary_click_up(int argc, VALUE* argv, VALUE self)
+{
+  if (argc == 0)
+    rb_raise(rb_eArgError, "arbitrary_click_up requires at least one arg");
+
+  uint_t button = NUM2INT(argv[0]);
+
+  switch (argc)
+    {
+    case 1:
+      mouse_arbitrary_click_up(button);
+      break;
+    case 2:
+    default:
+      mouse_arbitrary_click_up2(button, rb_mouse_unwrap_point(argv[1]));
     }
 
   return CURRENT_POSITION;
@@ -479,19 +607,25 @@ Init_mouse()
 
   rb_extend_object(rb_mMouse, rb_mMouse);
 
-  rb_define_method(rb_mMouse, "current_position", rb_mouse_current_position,  0);
-  rb_define_method(rb_mMouse, "move_to",          rb_mouse_move_to,          -1);
-  rb_define_method(rb_mMouse, "drag_to",          rb_mouse_drag_to,          -1);
-  rb_define_method(rb_mMouse, "scroll",           rb_mouse_scroll,           -1);
-  rb_define_method(rb_mMouse, "click_down",       rb_mouse_click_down,       -1);
-  rb_define_method(rb_mMouse, "click_up",         rb_mouse_click_up,         -1);
-  rb_define_method(rb_mMouse, "click",            rb_mouse_click,            -1);
-  rb_define_method(rb_mMouse, "secondary_click",  rb_mouse_secondary_click,  -1);
-  rb_define_method(rb_mMouse, "middle_click",     rb_mouse_middle_click,     -1);
-  rb_define_method(rb_mMouse, "arbitrary_click",  rb_mouse_arbitrary_click,  -1);
-  rb_define_method(rb_mMouse, "multi_click",      rb_mouse_multi_click,      -1);
-  rb_define_method(rb_mMouse, "double_click",     rb_mouse_double_click,     -1);
-  rb_define_method(rb_mMouse, "triple_click",     rb_mouse_triple_click,     -1);
+  rb_define_method(rb_mMouse, "current_position",     rb_mouse_current_position,      0);
+  rb_define_method(rb_mMouse, "move_to",              rb_mouse_move_to,              -1);
+  rb_define_method(rb_mMouse, "drag_to",              rb_mouse_drag_to,              -1);
+  rb_define_method(rb_mMouse, "scroll",               rb_mouse_scroll,               -1);
+  rb_define_method(rb_mMouse, "click_down",           rb_mouse_click_down,           -1);
+  rb_define_method(rb_mMouse, "click_up",             rb_mouse_click_up,             -1);
+  rb_define_method(rb_mMouse, "click",                rb_mouse_click,                -1);
+  rb_define_method(rb_mMouse, "secondary_click_down", rb_mouse_secondary_click_down, -1);
+  rb_define_method(rb_mMouse, "secondary_click_up",   rb_mouse_secondary_click_up,   -1);
+  rb_define_method(rb_mMouse, "secondary_click",      rb_mouse_secondary_click,      -1);
+  rb_define_method(rb_mMouse, "middle_click",         rb_mouse_middle_click,         -1);
+  rb_define_method(rb_mMouse, "arbitrary_click_down", rb_mouse_arbitrary_click_down, -1);
+  rb_define_method(rb_mMouse, "arbitrary_click_up",   rb_mouse_arbitrary_click_up,   -1);
+  rb_define_method(rb_mMouse, "arbitrary_click",      rb_mouse_arbitrary_click,      -1);
+  rb_define_method(rb_mMouse, "multi_click",          rb_mouse_multi_click,          -1);
+  rb_define_method(rb_mMouse, "double_click",         rb_mouse_double_click,         -1);
+  rb_define_method(rb_mMouse, "triple_click",         rb_mouse_triple_click,         -1);
 
-  rb_define_alias(rb_mMouse, "right_click", "secondary_click");
+  rb_define_alias(rb_mMouse, "right_click_down", "secondary_click_down");
+  rb_define_alias(rb_mMouse, "right_click_up",   "secondary_click_up");
+  rb_define_alias(rb_mMouse, "right_click",      "secondary_click");
 }

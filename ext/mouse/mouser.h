@@ -32,9 +32,23 @@ void mouse_click_up2(CGPoint point);
 void mouse_click();
 void mouse_click2(CGPoint point);
 
+void mouse_secondary_click_down();
+void mouse_secondary_click_down2(CGPoint point);
+void mouse_secondary_click_down3(CGPoint point, uint_t sleep_quanta);
+
+void mouse_secondary_click_up();
+void mouse_secondary_click_up2(CGPoint point);
+
 void mouse_secondary_click();
 void mouse_secondary_click2(CGPoint point);
 void mouse_secondary_click3(CGPoint point, uint_t sleep_quanta);
+
+void mouse_arbitrary_click_down(CGEventMouseSubtype button);
+void mouse_arbitrary_click_down2(CGEventMouseSubtype button, CGPoint point);
+void mouse_arbitrary_click_down3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_quanta);
+
+void mouse_arbitrary_click_up(CGEventMouseSubtype button);
+void mouse_arbitrary_click_up2(CGEventMouseSubtype button, CGPoint point);
 
 void mouse_arbitrary_click(CGEventMouseSubtype button);
 void mouse_arbitrary_click2(CGEventMouseSubtype button, CGPoint point);

@@ -27,10 +27,10 @@ static const double DEFAULT_DURATION = 0.2; // seconds
 #endif
 
 #define POSTRELEASE(x) do {			\
-  CGEventRef event = x;  	 		\
-  POST(event);					\
-  RELEASE(event);				\
-} while(false);
+    CGEventRef event = x;  	 		\
+    POST(event);				\
+    RELEASE(event);				\
+  } while(false);
 
 
 static
@@ -225,57 +225,134 @@ mouse_click()
 
 
 void
-mouse_secondary_click3(CGPoint point, uint_t sleep_quanta)
+mouse_secondary_click_down3(CGPoint point, uint_t sleep_quanta)
 {
   CGEventRef base_event = NEW_EVENT(
 				    kCGEventRightMouseDown,
 				    point,
 				    kCGMouseButtonRight
 				    );
-  POST(base_event);
-  mouse_sleep(sleep_quanta);
-
-  CHANGE(base_event, kCGEventRightMouseUp);
   POSTRELEASE(base_event);
+  mouse_sleep(sleep_quanta);
+}
+
+void
+mouse_secondary_click_down2(CGPoint point)
+{
+  mouse_secondary_click_down3(point, FPS / 10);
+}
+
+void
+mouse_secondary_click_down()
+{
+  mouse_secondary_click_down2(mouse_current_position());
+}
+
+
+void
+mouse_secondary_click_up2(CGPoint point)
+{
+  CGEventRef base_event = NEW_EVENT(
+				    kCGEventRightMouseUp,
+				    point,
+				    kCGMouseButtonRight
+				    );
+  POSTRELEASE(base_event);
+}
+
+void
+mouse_secondary_click_up()
+{
+  mouse_secondary_click_up2(mouse_current_position());
+}
+
+
+void
+mouse_secondary_click3(CGPoint point, uint_t sleep_quanta)
+{
+  mouse_secondary_click_down3(point, sleep_quanta);
+  mouse_secondary_click_up2(point);
 }
 
 void
 mouse_secondary_click2(CGPoint point)
 {
-  mouse_secondary_click3(point, FPS / 10);
+  mouse_secondary_click_down2(point);
+  mouse_secondary_click_up2(point);
 }
 
 void
 mouse_secondary_click()
 {
-  mouse_secondary_click2(mouse_current_position());
+  mouse_secondary_click_down();
+  mouse_secondary_click_up();
 }
 
 
 void
-mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_quanta)
+mouse_arbitrary_click_down3(
+			    CGEventMouseSubtype button,
+			    CGPoint point,
+			    uint_t sleep_quanta
+			    )
 {
   CGEventRef base_event = NEW_EVENT(
 				    kCGEventOtherMouseDown,
 				    point,
 				    button
 				    );
-  POST(base_event);
-  mouse_sleep(sleep_quanta);
-  CHANGE(base_event, kCGEventOtherMouseUp);
   POSTRELEASE(base_event);
+  mouse_sleep(sleep_quanta);
+}
+
+void
+mouse_arbitrary_click_down2(CGEventMouseSubtype button, CGPoint point)
+{
+  mouse_arbitrary_click_down3(button, point, FPS / 10);
+}
+
+void
+mouse_arbitrary_click_down(CGEventMouseSubtype button)
+{
+  mouse_arbitrary_click_down2(button, mouse_current_position());
+}
+
+
+void mouse_arbitrary_click_up2(CGEventMouseSubtype button, CGPoint point)
+{
+  CGEventRef base_event = NEW_EVENT(
+				    kCGEventOtherMouseUp,
+				    point,
+				    button
+				    );
+  POSTRELEASE(base_event);
+}
+
+void mouse_arbitrary_click_up(CGEventMouseSubtype button)
+{
+  mouse_arbitrary_click_up2(button, mouse_current_position());
+}
+
+
+void
+mouse_arbitrary_click3(CGEventMouseSubtype button, CGPoint point, uint_t sleep_quanta)
+{
+  mouse_arbitrary_click_down3(button, point, sleep_quanta);
+  mouse_arbitrary_click_up2(button, point);
 }
 
 void
 mouse_arbitrary_click2(CGEventMouseSubtype button, CGPoint point)
 {
-  mouse_arbitrary_click3(button, point, FPS / 10);
+  mouse_arbitrary_click_down2(button, point);
+  mouse_arbitrary_click_up2(button, point);
 }
 
 void
 mouse_arbitrary_click(CGEventMouseSubtype button)
 {
-  mouse_arbitrary_click2(button, mouse_current_position());
+  mouse_arbitrary_click_down(button);
+  mouse_arbitrary_click_up(button);
 }
 
 
