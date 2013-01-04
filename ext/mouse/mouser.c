@@ -152,7 +152,7 @@ mouse_scroll3(int amount, CGScrollEventUnit units, double duration)
 {
   size_t     steps = round(FPS * duration);
   double   current = 0.0;
-  double      done = 0;
+  double      done = 0.0;
   int32_t   scroll = 0;
 
   for (size_t step = 0; step < steps; step++) {
