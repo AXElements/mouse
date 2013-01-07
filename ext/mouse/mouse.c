@@ -15,6 +15,7 @@ static VALUE sym_down;
 static VALUE sym_left;
 static VALUE sym_right;
 static VALUE sym_zoom;
+static VALUE sym_unzoom;
 static VALUE sym_expand;
 static VALUE sym_contract;
 
@@ -582,6 +583,9 @@ rb_mouse_triple_click(int argc, VALUE *argv, VALUE self)
   return CURRENT_POSITION;
 }
 
+
+/* @!group Gestures */
+
 /*
  * Perform a smart magnify (double tap on trackpad)
  *
@@ -629,9 +633,9 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
   VALUE             input_direction = argv[0];
   CGGesturePinchDirection direction = kCGDirectionNone;
 
-  if (input_direction == sym_expand)
+  if (input_direction == sym_expand || input_direction == sym_zoom)
     direction = kCGDirectionExpand;
-  else if (input_direction == sym_contract)
+  else if (input_direction == sym_contract || input_direction == sym_unzoom)
     direction = kCGDirectionContract;
   else
     rb_raise(
@@ -656,6 +660,8 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
   return CURRENT_POSITION;
 }
 
+/* @!endgroup */
+
 
 void
 Init_mouse()
@@ -677,8 +683,10 @@ Init_mouse()
   sym_right    = ID2SYM(rb_intern("right"));
 
   sym_zoom     = ID2SYM(rb_intern("zoom"));
+  sym_unzoom   = ID2SYM(rb_intern("unzoom"));
   sym_expand   = ID2SYM(rb_intern("expand"));
   sym_contract = ID2SYM(rb_intern("contract"));
+
 
   /*
    * Document-module: Mouse
@@ -717,10 +725,8 @@ Init_mouse()
   rb_define_method(rb_mMouse, "double_click",         rb_mouse_double_click,         -1);
   rb_define_method(rb_mMouse, "triple_click",         rb_mouse_triple_click,         -1);
 
-  /* @!group Gestures */
   rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
   rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
-  /* @!endgroup */
 
   rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");
   rb_define_alias(rb_mMouse, "right_click_up",        "secondary_click_up");
