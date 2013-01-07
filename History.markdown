@@ -1,3 +1,8 @@
+# 2.0.0 - Gestures
+
+  * Add `Mouse.smart_magnify` to simulate two finger double taps
+  * Add `Mouse.two_finger_double_tap` as alias of `Mouse.smart_magnify`
+
 # 1.1.0 - A bit more granularity
 
   * Add `Mouse.secondary_click_down` and alias `Mouse.right_click_down`
