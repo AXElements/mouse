@@ -8,6 +8,7 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 #include "mouser.h"
+#include "CGEventAdditions.h"
 
 static const uint_t FPS     = 240;
 static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
@@ -28,9 +29,9 @@ static const double DEFAULT_MAGNIFICATION = 2.0; // factor
 #endif
 
 #define POSTRELEASE(x) do {			\
-    CGEventRef event = x;  	 		\
-    POST(event);				\
-    RELEASE(event);				\
+    CGEventRef _event = x;  	 		\
+    POST(_event);				\
+    RELEASE(_event);				\
   } while(false);
 
 
@@ -425,9 +426,41 @@ mouse_triple_click()
   mouse_triple_click2(mouse_current_position());
 }
 
+
+static
+void
+mouse_gesture(CGPoint point, uint_t sleep_quanta, void (^gesture_block)(void))
+{
+  POSTRELEASE(NEW_EVENT(kCGEventMouseMoved, point, kCGMouseButtonLeft));
+
+  CGEventRef gesture = CGEventCreate(nil);
+  CHANGE(gesture, kCGEventGesture);
+  CGEventSetIntegerValueField(gesture, kCGEventGestureType, kCGGestureTypeGestureStarted);
+  POST(gesture);
+
+  gesture_block();
+
+  CGEventSetIntegerValueField(gesture, kCGEventGestureType, kCGGestureTypeGestureEnded);
+  POSTRELEASE(gesture);
+
+  mouse_sleep(sleep_quanta);
+}
+
+void
+mouse_smart_magnify3(CGPoint point, uint_t sleep_quanta)
+{
+  mouse_gesture(point, sleep_quanta, ^(void) {
+      CGEventRef event = CGEventCreate(nil);
+      CHANGE(event, kCGEventGesture);
+      CGEventSetIntegerValueField(event, kCGEventGestureType, kCGGestureTypeSmartMagnify);
+      POSTRELEASE(event);
+    });
+}
+
 void
 mouse_smart_magnify2(CGPoint point)
 {
+  mouse_smart_magnify3(point, FPS / 2);
 }
 
 void

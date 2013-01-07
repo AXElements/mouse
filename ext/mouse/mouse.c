@@ -574,6 +574,33 @@ rb_mouse_triple_click(int argc, VALUE *argv, VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Perform a smart magnify (double tap on trackpad)
+ *
+ * You can optionally specify the point on the screen where to perform
+ * the smart magnification.
+ *
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
+{
+  switch (argc)
+    {
+    case 0:
+      mouse_smart_magnify();
+      break;
+    case 1:
+    default:
+      mouse_smart_magnify2(rb_mouse_unwrap_point(argv[0]));
+    }
+
+  return CURRENT_POSITION;
+}
+
+
 void
 Init_mouse()
 {
@@ -624,6 +651,10 @@ Init_mouse()
   rb_define_method(rb_mMouse, "multi_click",          rb_mouse_multi_click,          -1);
   rb_define_method(rb_mMouse, "double_click",         rb_mouse_double_click,         -1);
   rb_define_method(rb_mMouse, "triple_click",         rb_mouse_triple_click,         -1);
+
+  /* @!group Gestures */
+  rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
+  /* @!endgroup */
 
   rb_define_alias(rb_mMouse, "right_click_down", "secondary_click_down");
   rb_define_alias(rb_mMouse, "right_click_up",   "secondary_click_up");

@@ -43,6 +43,10 @@ testing; this is the purpose of the
     Mouse.scroll 10, :pixels
     Mouse.scroll -10, :pixels
 
+    # just like a two finger double tap
+    Mouse.smart_magnify
+    Mouse.smart_magnify [600, 500]
+
 See the [Mouse Documentation](http://rdoc.info/gems/mouse/Mouse) for
 more details.
 
