@@ -14,6 +14,9 @@ static VALUE sym_up;
 static VALUE sym_down;
 static VALUE sym_left;
 static VALUE sym_right;
+static VALUE sym_zoom;
+static VALUE sym_expand;
+static VALUE sym_contract;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -605,6 +608,54 @@ rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Perform a pinch gesture in given `direction`
+ *
+ * You can optionally specify the `magnification` factor and/or
+ * `duration` for the pinch event.
+ *
+ * @param direction [Symbol]
+ * @param magnification [Float] (_default_: `2.0`) (__optional__)
+ * @param duration [Float] (_default_: `1.0`) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
+{
+  if (!argc)
+    rb_raise(rb_eArgError, "wrong number of arguments (%d for 1+)", argc);
+
+  VALUE             input_direction = argv[0];
+  CGGesturePinchDirection direction = kCGDirectionNone;
+
+  if (input_direction == sym_expand)
+    direction = kCGDirectionExpand;
+  else if (input_direction == sym_contract)
+    direction = kCGDirectionContract;
+  else
+    rb_raise(
+	     rb_eArgError,
+	     "invalid pinch direction `%s'",
+	     rb_id2name(SYM2ID(input_direction))
+	     );
+
+  if (argc == 1) {
+    mouse_pinch(direction);
+    return CURRENT_POSITION;
+  }
+
+  double magnification = NUM2DBL(argv[1]);
+  if (argc == 2) {
+    mouse_pinch2(direction, magnification);
+    return CURRENT_POSITION;
+  }
+
+  double duration = NUM2DBL(argv[2]);
+  mouse_pinch3(direction, magnification, duration);
+  return CURRENT_POSITION;
+}
+
 
 void
 Init_mouse()
@@ -624,6 +675,10 @@ Init_mouse()
   sym_down     = ID2SYM(rb_intern("down"));
   sym_left     = ID2SYM(rb_intern("left"));
   sym_right    = ID2SYM(rb_intern("right"));
+
+  sym_zoom     = ID2SYM(rb_intern("zoom"));
+  sym_expand   = ID2SYM(rb_intern("expand"));
+  sym_contract = ID2SYM(rb_intern("contract"));
 
   /*
    * Document-module: Mouse
@@ -664,6 +719,7 @@ Init_mouse()
 
   /* @!group Gestures */
   rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
+  rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
   /* @!endgroup */
 
   rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");

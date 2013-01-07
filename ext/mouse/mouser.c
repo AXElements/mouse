@@ -8,13 +8,14 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 #include "mouser.h"
-#include "CGEventAdditions.h"
 
 static const uint_t FPS     = 240;
 static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
 static const double DEFAULT_MAGNIFICATION = 2.0; // factor
+static const double PINCH_STEPS           = 50.0;
 
+#define NEW_GESTURE(name) CGEventRef name = CGEventCreate(nil);	CHANGE(name, kCGEventGesture);
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
 #define POST(event) CGEventPost(kCGHIDEventTap, event)
 #define CHANGE(event,type) CGEventSetType(event, type)
@@ -481,18 +482,50 @@ mouse_swipe(int direction)
 }
 
 void
-mouse_pinch3(int direction, double magnification, double duration)
+mouse_pinch3(
+	     CGGesturePinchDirection direction,
+	     double magnification,
+	     double duration
+	     )
 {
+  switch (direction)
+    {
+    case kCGDirectionExpand:
+      break;
+    case kCGDirectionContract:
+      magnification = -(magnification);
+      break;
+    default:
+      return;
+    }
+
+  mouse_gesture(mouse_current_position(), FPS / 10, ^(void) {
+      NEW_GESTURE(pinch);
+      CGEventSetIntegerValueField(pinch, kCGEventGestureType, kCGGestureTypePinch);
+
+      size_t steps       = PINCH_STEPS;
+      double step_size   = magnification / steps;
+      double step_period = (duration / steps) * 1000000;
+
+      CGEventSetDoubleValueField(pinch, kCGEventGesturePinchValue, step_size);
+
+      for (size_t i = 0; i < steps; i++) {
+	POST(pinch);
+	usleep(step_period);
+      }
+
+      RELEASE(pinch);
+    });
 }
 
 void
-mouse_pinch2(int direction, double magnification)
+mouse_pinch2(CGGesturePinchDirection direction, double magnification)
 {
  mouse_pinch3(direction, magnification, DEFAULT_DURATION);
 }
 
 void
-mouse_pinch(int direction)
+mouse_pinch(CGGesturePinchDirection direction)
 {
   mouse_pinch2(direction, DEFAULT_MAGNIFICATION);
 }

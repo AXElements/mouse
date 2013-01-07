@@ -7,6 +7,7 @@
 //
 
 #include <ApplicationServices/ApplicationServices.h>
+#include "CGEventAdditions.h"
 
 typedef unsigned int uint_t;
 
@@ -77,9 +78,9 @@ void mouse_smart_magnify3(CGPoint point, uint_t sleep_quanta);
 void mouse_swipe(int direction);
 void mouse_swipe2(int direction, double duration);
 
-void mouse_pinch(int direction);
-void mouse_pinch2(int direction, double magnification);
-void mouse_pinch3(int direction, double magnification, double duration);
+void mouse_pinch(CGGesturePinchDirection direction);
+void mouse_pinch2(CGGesturePinchDirection direction, double magnification);
+void mouse_pinch3(CGGesturePinchDirection direction, double magnification, double duration);
 
 void mouse_rotate(int direction, double angle);
 void mouse_rotate2(int direction, double angle, double duration);
