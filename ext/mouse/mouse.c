@@ -7,8 +7,13 @@ static ID sel_x;
 static ID sel_y;
 static ID sel_to_point;
 static ID sel_new;
-static ID unit_pixel;
-static ID unit_line;
+
+static VALUE sym_pixel;
+static VALUE sym_line;
+static VALUE sym_up;
+static VALUE sym_down;
+static VALUE sym_left;
+static VALUE sym_right;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -136,12 +141,12 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
     return argv[0];
   }
 
-  ID units = rb_to_id(argv[1]);
+  VALUE units = argv[1];
 
   if (argc == 2) {
-    if (units == unit_pixel)
+    if (units == sym_pixel)
       mouse_scroll2(amt, kCGScrollEventUnitPixel);
-    else if (units == unit_line)
+    else if (units == sym_line)
       mouse_scroll2(amt, kCGScrollEventUnitLine);
     else
       rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
@@ -150,9 +155,9 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
   if (argc == 3) {
     double duration = NUM2DBL(argv[2]);
 
-    if (units == unit_pixel)
+    if (units == sym_pixel)
       mouse_scroll3(amt, kCGScrollEventUnitPixel, duration);
-    else if (units == unit_line)
+    else if (units == sym_line)
       mouse_scroll3(amt, kCGScrollEventUnitLine, duration);
     else
       rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
@@ -612,8 +617,13 @@ Init_mouse()
   sel_to_point = rb_intern("to_point");
   sel_new      = rb_intern("new");
 
-  unit_pixel   = rb_intern("pixel");
-  unit_line    = rb_intern("line");
+  sym_pixel    = ID2SYM(rb_intern("pixel"));
+  sym_line     = ID2SYM(rb_intern("line"));
+
+  sym_up       = ID2SYM(rb_intern("up"));
+  sym_down     = ID2SYM(rb_intern("down"));
+  sym_left     = ID2SYM(rb_intern("left"));
+  sym_right    = ID2SYM(rb_intern("right"));
 
   /*
    * Document-module: Mouse
