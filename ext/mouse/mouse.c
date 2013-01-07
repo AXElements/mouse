@@ -656,7 +656,8 @@ Init_mouse()
   rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
   /* @!endgroup */
 
-  rb_define_alias(rb_mMouse, "right_click_down", "secondary_click_down");
-  rb_define_alias(rb_mMouse, "right_click_up",   "secondary_click_up");
-  rb_define_alias(rb_mMouse, "right_click",      "secondary_click");
+  rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");
+  rb_define_alias(rb_mMouse, "right_click_up",        "secondary_click_up");
+  rb_define_alias(rb_mMouse, "right_click",           "secondary_click");
+  rb_define_alias(rb_mMouse, "two_finger_double_tap", "smart_magnify");
 }
