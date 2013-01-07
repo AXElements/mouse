@@ -618,6 +618,15 @@ rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
  * You can optionally specify the `magnification` factor and/or
  * `duration` for the pinch event.
  *
+ * Available pinch directions are:
+ *
+ *   - `:zoom` or `:expand`
+ *   - `:unzoom` or `:contract`
+ *
+ * Magnification is a relative magnification setting. A zoom value of
+ * `1.0` means `1.0` more than the current zoom level. `2.0` would be
+ * `2.0` levels higher than the current zoom.
+ *
  * @param direction [Symbol]
  * @param magnification [Float] (_default_: `2.0`) (__optional__)
  * @param duration [Float] (_default_: `1.0`) (__optional__)

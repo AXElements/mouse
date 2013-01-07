@@ -47,6 +47,15 @@ testing; this is the purpose of the
     Mouse.smart_magnify
     Mouse.smart_magnify [600, 500]
 
+    # pinch-to-zoom
+    Mouse.pinch :zoom
+    Mouse.pinch :expand, 2
+
+    # pinch-to-unzoom
+    Mouse.pinch :unzoom, 2.0, 5.0
+    Mouse.pinch :contract, 1.0
+
+
 See the [Mouse Documentation](http://rdoc.info/gems/mouse/Mouse) for
 more details.
 

@@ -2,6 +2,7 @@
 
   * Add `Mouse.smart_magnify` to simulate two finger double taps
   * Add `Mouse.two_finger_double_tap` as alias of `Mouse.smart_magnify`
+  * Add `Mouse.pinch` to simulate pinch-to-zoom and pinch-to-expand
 
 # 1.1.0 - A bit more granularity
 
