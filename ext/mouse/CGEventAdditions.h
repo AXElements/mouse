@@ -135,8 +135,8 @@ enum {
  *
  * @constant kCGGestureMotionNone            None
  *
- * @constant kCGGestureMotionHorizontalX     Horizontal
- * @constant kCGGestureMotionVerticalY       Vertical
+ * @constant kCGGestureMotionHorizontal      Horizontal
+ * @constant kCGGestureMotionVertical        Vertical
  *
  * @constant kCGGestureMotionPinch           Pinch
  * @constant kCGGestureMotionRotate          Rotation
@@ -157,8 +157,8 @@ typedef uint16_t CGGestureMotion;
 enum {
   kCGGestureMotionNone           = kIOHIDGestureMotionNone,
 
-  kCGGestureMotionHorizontalX    = kIOHIDGestureMotionHorizontalX,
-  kCGGestureMotionVerticalY      = kIOHIDGestureMotionVerticalY,
+  kCGGestureMotionHorizontal     = kIOHIDGestureMotionHorizontalX,
+  kCGGestureMotionVertical       = kIOHIDGestureMotionVerticalY,
 
   kCGGestureMotionPinch          = kIOHIDGestureMotionScale,
   kCGGestureMotionRotate         = kIOHIDGestureMotionRotate,
@@ -194,4 +194,19 @@ enum {
   kCGGestureSwipeDirectionDown  = kIOHIDSwipeDown,
   kCGGestureSwipeDirectionLeft  = kIOHIDSwipeLeft,
   kCGGestureSwipeDirectionRight = kIOHIDSwipeRight,
+};
+
+/*!
+ * @enum CGPinchDirection
+ * @abstract Pinch directions
+ *
+ * @constant kCGDirectionNone      None
+ * @constant kCGDirectionExpand    Expand
+ * @constant kCGDirectionContract  Contract
+ */
+typedef uint16_t CGGesturePinchDirection;
+enum {
+  kCGDirectionNone = 0,
+  kCGDirectionExpand,
+  kCGDirectionContract,
 };
