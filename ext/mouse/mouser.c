@@ -434,9 +434,12 @@ mouse_gesture(CGPoint point, uint_t sleep_quanta, void (^gesture_block)(void))
 {
   POSTRELEASE(NEW_EVENT(kCGEventMouseMoved, point, kCGMouseButtonLeft));
 
-  CGEventRef gesture = CGEventCreate(nil);
-  CHANGE(gesture, kCGEventGesture);
-  CGEventSetIntegerValueField(gesture, kCGEventGestureType, kCGGestureTypeGestureStarted);
+  NEW_GESTURE(gesture);
+  CGEventSetIntegerValueField(
+                              gesture,
+			      kCGEventGestureType,
+			      kCGGestureTypeGestureStarted
+			      );
   POST(gesture);
 
   gesture_block();
@@ -451,8 +454,7 @@ void
 mouse_smart_magnify3(CGPoint point, uint_t sleep_quanta)
 {
   mouse_gesture(point, sleep_quanta, ^(void) {
-      CGEventRef event = CGEventCreate(nil);
-      CHANGE(event, kCGEventGesture);
+      NEW_GESTURE(event);
       CGEventSetIntegerValueField(event, kCGEventGestureType, kCGGestureTypeSmartMagnify);
       POSTRELEASE(event);
     });
