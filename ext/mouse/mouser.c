@@ -151,21 +151,26 @@ mouse_drag_to(CGPoint point)
   mouse_drag_to2(point, DEFAULT_DURATION);
 }
 
+
+#define SCROLL(vval, hval) do {				\
+    size_t     steps = round(FPS * duration);		\
+    double   current = 0.0;				\
+    double      done = 0.0;				\
+    int32_t   scroll = 0;				\
+    							\
+    for (size_t step = 0; step < steps; step++) {			\
+      done   = (double)(step+1) / (double)steps;			\
+      scroll = round((done - current) * amount);			\
+      POSTRELEASE(CGEventCreateScrollWheelEvent(nil, units, 2, vval, hval)); \
+      mouse_sleep(2);							\
+      current += (double)scroll / (double)amount;			\
+    }									\
+  } while (false);
+
 void
 mouse_scroll3(int amount, CGScrollEventUnit units, double duration)
 {
-  size_t     steps = round(FPS * duration);
-  double   current = 0.0;
-  double      done = 0.0;
-  int32_t   scroll = 0;
-
-  for (size_t step = 0; step < steps; step++) {
-    done   = (double)(step+1) / (double)steps;
-    scroll = round((done - current) * amount);
-    POSTRELEASE(CGEventCreateScrollWheelEvent(nil, units, 1, scroll));
-    mouse_sleep(2);
-    current += (double)scroll / (double)amount;
-  }
+  SCROLL(scroll, 0);
 }
 
 void
@@ -183,18 +188,7 @@ mouse_scroll(int amount)
 void
 mouse_horizontal_scroll3(int amount, CGScrollEventUnit units, double duration)
 {
-  size_t     steps = round(FPS * duration);
-  double   current = 0.0;
-  double      done = 0.0;
-  int32_t   scroll = 0;
-
-  for (size_t step = 0; step < steps; step++) {
-    done   = (double)(step+1) / (double)steps;
-    scroll = round((done - current) * amount);
-    POSTRELEASE(CGEventCreateScrollWheelEvent(nil, units, 2, 0, scroll));
-    mouse_sleep(2);
-    current += (double)scroll / (double)amount;
-  }
+  SCROLL(0, scroll);
 }
 
 void
