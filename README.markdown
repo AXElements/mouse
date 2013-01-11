@@ -57,6 +57,11 @@ testing; this is the purpose of the
     Mouse.pinch :unzoom, 2.0, 5.0
     Mouse.pinch :contract, 1.0
 
+    # even perform rotation gestures!
+    Mouse.rotate :clockwise, 90
+    Mouse.rotate :counter_clockwise, 180
+    Mouse.rotate :cw, 360
+
 
 See the [Mouse Documentation](http://rdoc.info/gems/mouse/Mouse) for
 more details.

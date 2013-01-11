@@ -671,6 +671,31 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
   return CURRENT_POSITION;
 }
 
+/*
+ * Perform a rotation gesture in the given `direction` the given `angle` degrees
+ *
+ * Possible directions are:
+ *
+ *   - `:cw`, ':clockwise`, ':clock_wise` to rotate in the clockwise
+ *     direction
+ *   - `:ccw`, ':counter_clockwise`, `:counter_clock_wise` to rotate in
+ *     the the counter clockwise direction
+ *
+ * The `angle` parameter is a number of degrees to rotate. There are 360
+ * degrees in a full rotation, as you would expect in Euclidian geometry.
+ *
+ * You can also optionally specify a point on screen for the mouse
+ * pointer to be moved to before the gesture begins. The movement will
+ * be instantaneous.
+ *
+ * An animation duration can also be specified.
+ *
+ * @param direction [Symbol]
+ * @param angle [Float]
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @param duration [Float] (_default_: `0.2`) (__optional__)
+ * @return [CGPoint]
+ */
 static
 VALUE
 rb_mouse_rotate(int argc, VALUE* argv, VALUE self)
