@@ -78,7 +78,6 @@ void mouse_smart_magnify3(CGPoint point, uint_t sleep_quanta);
 void mouse_swipe(CGSwipeDirection direction);
 void mouse_swipe2(CGSwipeDirection direction, CGPoint point);
 void mouse_swipe3(CGSwipeDirection direction, CGPoint point, double duration);
-void mouse_swipe4(CGSwipeDirection direction, CGPoint point, double duration, uint_t sleep_quanta);
 
 void mouse_pinch(CGPinchDirection direction);
 void mouse_pinch2(CGPinchDirection direction, double magnification);

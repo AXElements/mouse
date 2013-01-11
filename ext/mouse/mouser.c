@@ -13,6 +13,7 @@ static const uint_t FPS     = 240;
 static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
 static const double DEFAULT_MAGNIFICATION = 1.0; // factor
+static const double SWIPE_STEPS           = 25;
 static const double PINCH_STEPS           = 50;
 static const double ROTATION_STEPS        = 50;
 
@@ -474,19 +475,56 @@ mouse_smart_magnify()
 }
 
 void
-mouse_swipe4(
+mouse_swipe3(
 	     CGSwipeDirection direction,
 	     CGPoint point,
-	     double duration,
-	     uint_t sleep_quanta
+	     double duration
 	     )
 {
-}
+  uint16_t            axis = 0;
+  CGFloat         distance = 1.0;
+  CGGestureMotion   motion = kCGGestureMotionNone;
 
-void
-mouse_swipe3(CGSwipeDirection direction, CGPoint point, double duration)
-{
-  mouse_swipe4(direction, point, duration, FPS / 10);
+  switch (direction)
+    {
+    case kCGSwipeDirectionUp:
+      axis     = kCGEventGestureSwipePositionY;
+      motion   = kCGGestureMotionVertical;
+      distance = -(distance);
+      break;
+    case kCGSwipeDirectionDown:
+      axis     = kCGEventGestureSwipePositionY;
+      motion   = kCGGestureMotionVertical;
+      break;
+    case kCGSwipeDirectionLeft:
+      axis     = kCGEventGestureSwipePositionX;
+      motion   = kCGGestureMotionHorizontal;
+      break;
+    case kCGSwipeDirectionRight:
+      axis     = kCGEventGestureSwipePositionX;
+      motion   = kCGGestureMotionHorizontal;
+      distance = -(distance);
+      break;
+    default:
+      return;
+    }
+
+  mouse_gesture(point, (FPS / 10), ^(void) {
+      NEW_GESTURE(swipe);
+
+      CGEventSetIntegerValueField(swipe, kCGEventGestureType,           kCGGestureTypeSwipe);
+      CGEventSetIntegerValueField(swipe, kCGEventGestureSwipeMotion,    motion);
+      CGEventSetIntegerValueField(swipe, kCGEventGestureSwipeDirection, direction);
+      CGEventSetIntegerValueField(swipe, kCGEventGesturePhase,          kCGGesturePhaseBegan);
+      CGEventSetDoubleValueField( swipe, kCGEventGestureSwipeProgress,  distance);
+      CGEventSetDoubleValueField( swipe, axis,                          distance);
+
+      // TODO: animation steps don't seem to do anything...
+      // kCGGesturePhaseChanged
+      // kCGGesturePhaseEnded
+
+      POSTRELEASE(swipe);
+    });
 }
 
 void

@@ -4,6 +4,7 @@
   * Add `Mouse.two_finger_double_tap` as alias of `Mouse.smart_magnify`
   * Add `Mouse.pinch` to simulate pinch-to-zoom and pinch-to-expand
   * Add `Mouse.rotate` to simulate rotation gestures
+  * Add `Mouse.swipe` to simulate a swipe gesture
 
 # 1.1.0 - A bit more granularity
 

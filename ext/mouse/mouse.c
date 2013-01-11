@@ -604,6 +604,59 @@ rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
 }
 
 /*
+ * Perform a swipe gesture in the given `direction`
+ *
+ * You can optionally specify a point on screen for the mouse
+ * pointer to be moved to before the gesture begins. The movement will
+ * be instantaneous.
+ *
+ * You can also optionally specify the duration of the swipe event.
+ *
+ * @param direction [Symbol]
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
+ * @param duration [Float] (_default_: `0.2`) (__optional__)
+ * @return [CGPoint]
+ */
+static
+VALUE
+rb_mouse_swipe(int argc, VALUE* argv, VALUE self)
+{
+  if (!argc)
+    rb_raise(rb_eArgError, "wrong number of arguments (0 for 1+)");
+
+  CGSwipeDirection direction;
+  VALUE direction_input = argv[0];
+  if (direction_input == sym_up)
+    direction = kCGSwipeDirectionUp;
+  else if (direction_input == sym_down)
+    direction = kCGSwipeDirectionDown;
+  else if (direction_input == sym_left)
+    direction = kCGSwipeDirectionLeft;
+  else if (direction_input == sym_right)
+    direction = kCGSwipeDirectionRight;
+  else
+    rb_raise(
+	     rb_eArgError,
+	     "invalid swipe direction `%s'",
+	     rb_id2name(SYM2ID(direction_input))
+	     );
+
+  if (argc == 1) {
+    mouse_swipe(direction);
+    return CURRENT_POSITION;
+  }
+
+  CGPoint point = rb_mouse_unwrap_point(argv[1]);
+
+  if (argc == 2)
+    mouse_swipe2(direction, point);
+  else
+    mouse_swipe3(direction, point, NUM2DBL(argv[1]));
+
+  return CURRENT_POSITION;
+}
+
+/*
  * Perform a pinch gesture in given `direction`
  *
  * You can optionally specify the `magnification` factor and/or
@@ -816,6 +869,7 @@ Init_mouse()
   rb_define_method(rb_mMouse, "triple_click",         rb_mouse_triple_click,         -1);
 
   rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
+  rb_define_method(rb_mMouse, "swipe",                rb_mouse_swipe,                -1);
   rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
   rb_define_method(rb_mMouse, "rotate",               rb_mouse_rotate,               -1);
 

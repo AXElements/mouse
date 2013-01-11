@@ -62,6 +62,12 @@ testing; this is the purpose of the
     Mouse.rotate :counter_clockwise, 180
     Mouse.rotate :cw, 360
 
+    # swipe, swipe, swipe
+    Mouse.swipe :up
+    Mouse.swipe :down
+    Mouse.swipe :left
+    Mouse.swipe :right
+
 
 See the [Mouse Documentation](http://rdoc.info/gems/mouse/Mouse) for
 more details.
