@@ -625,7 +625,7 @@ rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
  * An animation duration can also be specified.
  *
  * @param direction [Symbol]
- * @param magnification [Float] (_default_: `2.0`) (__optional__)
+ * @param magnification [Float] (_default_: `1.0`) (__optional__)
  * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
  * @param duration [Float] (_default_: `0.2`) (__optional__)
  * @return [CGPoint]

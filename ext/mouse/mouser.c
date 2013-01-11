@@ -12,7 +12,7 @@
 static const uint_t FPS     = 240;
 static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
-static const double DEFAULT_MAGNIFICATION = 2.0; // factor
+static const double DEFAULT_MAGNIFICATION = 1.0; // factor
 static const double PINCH_STEPS           = 50;
 static const double ROTATION_STEPS        = 50;
 
