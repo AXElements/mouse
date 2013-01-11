@@ -626,8 +626,13 @@ rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
  * `1.0` means `1.0` more than the current zoom level. `2.0` would be
  * `2.0` levels higher than the current zoom.
  *
+ * You can also optionally specify a point on screen for the mouse
+ * pointer to be moved to before the gesture begins. The movement will
+ * be instantaneous.
+ *
  * @param direction [Symbol]
  * @param magnification [Float] (_default_: `2.0`) (__optional__)
+ * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
  * @param duration [Float] (_default_: `1.0`) (__optional__)
  * @return [CGPoint]
  */
@@ -638,13 +643,13 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
   if (!argc)
     rb_raise(rb_eArgError, "wrong number of arguments (%d for 1+)", argc);
 
-  VALUE             input_direction = argv[0];
-  CGGesturePinchDirection direction = kCGDirectionNone;
+  VALUE            input_direction = argv[0];
+  CGPinchDirection       direction = kCGPinchNone;
 
   if (input_direction == sym_expand || input_direction == sym_zoom)
-    direction = kCGDirectionExpand;
+    direction = kCGPinchExpand;
   else if (input_direction == sym_contract || input_direction == sym_unzoom)
-    direction = kCGDirectionContract;
+    direction = kCGPinchContract;
   else
     rb_raise(
 	     rb_eArgError,
@@ -663,8 +668,17 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
     return CURRENT_POSITION;
   }
 
-  double duration = NUM2DBL(argv[2]);
-  mouse_pinch3(direction, magnification, duration);
+  CGPoint point = rb_mouse_unwrap_point(argv[2]);
+  if (argc == 3) {
+    mouse_pinch3(direction, magnification, point);
+    return CURRENT_POSITION;
+  }
+
+  double duration = NUM2DBL(argv[3]);
+  mouse_pinch4(direction, magnification, point, duration);
+  return CURRENT_POSITION;
+}
+
   return CURRENT_POSITION;
 }
 

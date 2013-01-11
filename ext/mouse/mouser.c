@@ -13,7 +13,7 @@ static const uint_t FPS     = 240;
 static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
 static const double DEFAULT_MAGNIFICATION = 2.0; // factor
-static const double PINCH_STEPS           = 50.0;
+static const double PINCH_STEPS           = 50;
 
 #define NEW_GESTURE(name) CGEventRef name = CGEventCreate(nil);	CHANGE(name, kCGEventGesture);
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
@@ -473,35 +473,54 @@ mouse_smart_magnify()
 }
 
 void
-mouse_swipe2(int direction, double duration)
+mouse_swipe4(
+	     CGSwipeDirection direction,
+	     CGPoint point,
+	     double duration,
+	     uint_t sleep_quanta
+	     )
 {
 }
 
 void
-mouse_swipe(int direction)
+mouse_swipe3(CGSwipeDirection direction, CGPoint point, double duration)
 {
-  mouse_swipe2(direction, DEFAULT_DURATION);
+  mouse_swipe4(direction, point, duration, FPS / 10);
 }
 
 void
-mouse_pinch3(
-	     CGGesturePinchDirection direction,
+mouse_swipe2(CGSwipeDirection direction, CGPoint point)
+{
+  mouse_swipe3(direction, point, DEFAULT_DURATION);
+}
+
+void
+mouse_swipe(CGSwipeDirection direction)
+{
+  mouse_swipe2(direction, mouse_current_position());
+}
+
+
+void
+mouse_pinch4(
+	     CGPinchDirection direction,
 	     double magnification,
+	     CGPoint point,
 	     double duration
 	     )
 {
   switch (direction)
     {
-    case kCGDirectionExpand:
+    case kCGPinchExpand:
       break;
-    case kCGDirectionContract:
+    case kCGPinchContract:
       magnification = -(magnification);
       break;
     default:
       return;
     }
 
-  mouse_gesture(mouse_current_position(), FPS / 10, ^(void) {
+  mouse_gesture(point, FPS / 10, ^(void) {
       NEW_GESTURE(pinch);
       CGEventSetIntegerValueField(pinch, kCGEventGestureType, kCGGestureTypePinch);
 
@@ -521,24 +540,41 @@ mouse_pinch3(
 }
 
 void
-mouse_pinch2(CGGesturePinchDirection direction, double magnification)
+mouse_pinch3(CGPinchDirection direction, double magnification, CGPoint point)
 {
- mouse_pinch3(direction, magnification, DEFAULT_DURATION);
+  mouse_pinch4(direction, magnification, point, DEFAULT_DURATION);
 }
 
 void
-mouse_pinch(CGGesturePinchDirection direction)
+mouse_pinch2(CGPinchDirection direction, double magnification)
+{
+  mouse_pinch3(direction, magnification, mouse_current_position());
+}
+
+void
+mouse_pinch(CGPinchDirection direction)
 {
   mouse_pinch2(direction, DEFAULT_MAGNIFICATION);
 }
 
 void
-mouse_rotate2(int direction, double angle, double duration)
+mouse_rotate3(
+	      CGRotateDirection direction,
+	      double angle,
+	      CGPoint point,
+	      double duration
+	      )
 {
 }
 
 void
-mouse_rotate(int direction, double angle)
+mouse_rotate2(CGRotateDirection direction, double angle, CGPoint point)
 {
-  mouse_rotate2(direction, angle, DEFAULT_DURATION);
+  mouse_rotate3(direction, angle, point, DEFAULT_DURATION);
+}
+
+void
+mouse_rotate(CGRotateDirection direction, double angle)
+{
+  mouse_rotate2(direction, angle, mouse_current_position());
 }
