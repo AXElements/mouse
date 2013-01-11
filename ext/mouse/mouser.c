@@ -13,9 +13,6 @@ static const uint_t FPS     = 240;
 static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
 static const double DEFAULT_MAGNIFICATION = 1.0; // factor
-static const double SWIPE_STEPS           = 25;
-static const double PINCH_STEPS           = 50;
-static const double ROTATION_STEPS        = 50;
 
 #define NEW_GESTURE(name) CGEventRef name = CGEventCreate(nil);	CHANGE(name, kCGEventGesture);
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
@@ -577,7 +574,7 @@ mouse_pinch4(
       NEW_GESTURE(pinch);
       CGEventSetIntegerValueField(pinch, kCGEventGestureType, kCGGestureTypePinch);
 
-      size_t steps       = PINCH_STEPS;
+      size_t steps       = FPS / duration;
       double step_size   = magnification / steps;
       double step_period = (duration / steps) * 1000000;
 
@@ -633,7 +630,7 @@ mouse_rotate3(
       NEW_GESTURE(rotation);
       CGEventSetIntegerValueField(rotation, kCGEventGestureType, kCGGestureTypeRotation);
 
-      size_t steps       = ROTATION_STEPS;
+      size_t steps       = FPS / duration;
       double step_size   = angle / steps;
       double step_period = (duration / steps) * 1000000;
 
