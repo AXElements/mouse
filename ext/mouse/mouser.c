@@ -453,19 +453,13 @@ mouse_gesture(CGPoint point, uint_t sleep_quanta, void (^gesture_block)(void))
 }
 
 void
-mouse_smart_magnify3(CGPoint point, uint_t sleep_quanta)
+mouse_smart_magnify2(CGPoint point)
 {
-  mouse_gesture(point, sleep_quanta, ^(void) {
+  mouse_gesture(point, (FPS / 2), ^(void) {
       NEW_GESTURE(event);
       CGEventSetIntegerValueField(event, kCGEventGestureType, kCGGestureTypeSmartMagnify);
       POSTRELEASE(event);
     });
-}
-
-void
-mouse_smart_magnify2(CGPoint point)
-{
-  mouse_smart_magnify3(point, FPS / 2);
 }
 
 void
@@ -538,7 +532,6 @@ mouse_swipe(CGSwipeDirection direction)
 {
   mouse_swipe2(direction, mouse_current_position());
 }
-
 
 void
 mouse_pinch4(
