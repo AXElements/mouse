@@ -178,35 +178,50 @@ enum {
 
 
 /*!
- * @enum CGGestureSwipeDirection
+ * @enum CGSwipeDirection
  * @abstract Swipe directions
  *
- * @constant kCGGestureSwipeDirectionNone    None
- * @constant kCGGestureSwipeDirectionUp      Up
- * @constant kCGGestureSwipeDirectionDown    Down
- * @constant kCGGestureSwipeDirectionLeft    Left
- * @constant kCGGestureSwipeDirectionRight   Right
+ * @constant kCGSwipeDirectionNone    None
+ * @constant kCGSwipeDirectionUp      Up
+ * @constant kCGSwipeDirectionDown    Down
+ * @constant kCGSwipeDirectionLeft    Left
+ * @constant kCGSwipeDirectionRight   Right
  */
-typedef uint16_t CGGestureSwipeDirection;
+typedef uint16_t CGSwipeDirection;
 enum {
-  kCGGestureSwipeDirectionNone  = kIOHIDSwipeNone,
-  kCGGestureSwipeDirectionUp    = kIOHIDSwipeUp,
-  kCGGestureSwipeDirectionDown  = kIOHIDSwipeDown,
-  kCGGestureSwipeDirectionLeft  = kIOHIDSwipeLeft,
-  kCGGestureSwipeDirectionRight = kIOHIDSwipeRight,
+  kCGSwipeDirectionNone  = kIOHIDSwipeNone,
+  kCGSwipeDirectionUp    = kIOHIDSwipeUp,
+  kCGSwipeDirectionDown  = kIOHIDSwipeDown,
+  kCGSwipeDirectionLeft  = kIOHIDSwipeLeft,
+  kCGSwipeDirectionRight = kIOHIDSwipeRight,
 };
 
 /*!
  * @enum CGPinchDirection
  * @abstract Pinch directions
  *
- * @constant kCGDirectionNone      None
- * @constant kCGDirectionExpand    Expand
- * @constant kCGDirectionContract  Contract
+ * @constant kCGPinchNone      None
+ * @constant kCGPinchExpand    Expand
+ * @constant kCGPinchContract  Contract
  */
-typedef uint16_t CGGesturePinchDirection;
+typedef uint16_t CGPinchDirection;
 enum {
-  kCGDirectionNone = 0,
-  kCGDirectionExpand,
-  kCGDirectionContract,
+  kCGPinchNone = 0,
+  kCGPinchExpand,
+  kCGPinchContract,
+};
+
+/*!
+ * @enum CGRotateDirection
+ * @abstract Rotation directions
+ *
+ * @constant kCGRotateNone             None
+ * @constant kCGRotateClockwise        Clockwise
+ * @constant kCGRotateCounterClockwise Counter Clockwise
+ */
+typedef uint16_t CGRotateDirection;
+enum {
+  kCGRotateNone = 0,
+  kCGRotateClockwise,
+  kCGRotateCounterClockwise,
 };
