@@ -25,7 +25,6 @@ static
 VALUE
 rb_mouse_wrap_point(CGPoint point)
 {
-  // TODO: Data_Wrap_Struct instead
 #if NOT_MACRUBY
   return rb_struct_new(rb_cCGPoint, DBL2NUM(point.x), DBL2NUM(point.y));
 #else
