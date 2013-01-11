@@ -157,8 +157,50 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
   return argv[0];
 }
 
+/*
+ * @note Scrolling by `:pixel` may not actually be by real pixels, but instead
+ *       correspond to Cocoa co-ords (I don't have a retina display, so I haven't
+ *       checked it out yet).
+ *
+ * Generate `amount` of horizontal scroll events at the current cursor position
+ *
+ * Returns number of lines scrolled. A positive `amount` will scroll left
+ * and a negative `amount` will scroll right.
+ *
+ * An animation duration can also be specified.
+ *
+ * @param amount [Number]
+ * @param units [Symbol] `:pixel` or `:line` (_default_: `:line` ) (__optional__)
+ * @param duration [Float] (_default_: `0.2`) (__optional__)
+ * @return [Number]
+ */
+static
+VALUE
+rb_mouse_horizontal_scroll(int argc, VALUE *argv, VALUE self)
+{
+  if (argc == 0 || argc > 3)
+    rb_raise(rb_eArgError, "scroll requires 1..3 arguments, you gave %d", argc);
+
+  int amt = NUM2INT(argv[0]);
+
+  if (argc == 1) {
+    mouse_horizontal_scroll(amt);
+
+  } else {
+    VALUE             input_units = argv[1];
+    CGScrollEventUnit units;
+
+    if (input_units == sym_pixel)
+      units = kCGScrollEventUnitPixel;
+    else if (input_units == sym_line)
+      units = kCGScrollEventUnitLine;
     else
-      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
+      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(input_units));
+
+    if (argc == 2)
+      mouse_horizontal_scroll2(amt, units);
+    else
+      mouse_horizontal_scroll3(amt, units, NUM2DBL(argv[2]));
   }
 
   return argv[0];
@@ -857,6 +899,7 @@ Init_mouse()
   rb_define_method(rb_mMouse, "move_to",              rb_mouse_move_to,              -1);
   rb_define_method(rb_mMouse, "drag_to",              rb_mouse_drag_to,              -1);
   rb_define_method(rb_mMouse, "scroll",               rb_mouse_scroll,               -1);
+  rb_define_method(rb_mMouse, "horizontal_scroll",    rb_mouse_horizontal_scroll,    -1);
   rb_define_method(rb_mMouse, "click_down",           rb_mouse_click_down,           -1);
   rb_define_method(rb_mMouse, "click_up",             rb_mouse_click_up,             -1);
   rb_define_method(rb_mMouse, "click",                rb_mouse_click,                -1);
@@ -876,6 +919,7 @@ Init_mouse()
   rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
   rb_define_method(rb_mMouse, "rotate",               rb_mouse_rotate,               -1);
 
+  rb_define_alias(rb_mMouse, "hscroll",               "horizontal_scroll");
   rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");
   rb_define_alias(rb_mMouse, "right_click_up",        "secondary_click_up");
   rb_define_alias(rb_mMouse, "right_click",           "secondary_click");

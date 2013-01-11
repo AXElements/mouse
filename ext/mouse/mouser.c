@@ -151,7 +151,6 @@ mouse_drag_to(CGPoint point)
   mouse_drag_to2(point, DEFAULT_DURATION);
 }
 
-
 void
 mouse_scroll3(int amount, CGScrollEventUnit units, double duration)
 {
@@ -181,6 +180,34 @@ mouse_scroll(int amount)
   mouse_scroll2(amount, kCGScrollEventUnitLine);
 }
 
+void
+mouse_horizontal_scroll3(int amount, CGScrollEventUnit units, double duration)
+{
+  size_t     steps = round(FPS * duration);
+  double   current = 0.0;
+  double      done = 0.0;
+  int32_t   scroll = 0;
+
+  for (size_t step = 0; step < steps; step++) {
+    done   = (double)(step+1) / (double)steps;
+    scroll = round((done - current) * amount);
+    POSTRELEASE(CGEventCreateScrollWheelEvent(nil, units, 2, 0, scroll));
+    mouse_sleep(2);
+    current += (double)scroll / (double)amount;
+  }
+}
+
+void
+mouse_horizontal_scroll2(int amount, CGScrollEventUnit units)
+{
+  mouse_horizontal_scroll3(amount, units, DEFAULT_DURATION);
+}
+
+void
+mouse_horizontal_scroll(int amount)
+{
+  mouse_horizontal_scroll2(amount, kCGScrollEventUnitLine);
+}
 
 void
 mouse_click_down3(CGPoint point, uint_t sleep_quanta)

@@ -41,6 +41,11 @@ testing; this is the purpose of the
     Mouse.scroll 10
     Mouse.scroll -10
 
+    # perform horizontal scrolling as well
+    # positive number scrolls left, negative number scrolls right
+    Mouse.horizontal_scroll 10
+    Mouse.horizontal_scroll -10
+
     # optionally specify units for scroll amount, :pixel or :line
     Mouse.scroll 10, :pixels
     Mouse.scroll -10, :pixels

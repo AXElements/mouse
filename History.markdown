@@ -5,6 +5,8 @@
   * Add `Mouse.pinch` to simulate pinch-to-zoom and pinch-to-expand
   * Add `Mouse.rotate` to simulate rotation gestures
   * Add `Mouse.swipe` to simulate a swipe gesture
+  * Add `Mouse.horizontal_scroll` to scroll horizontally
+  * Add `Mouse.hscroll` as alias of `Mouse.horizontal_scroll`
 
 # 1.1.0 - A bit more granularity
 

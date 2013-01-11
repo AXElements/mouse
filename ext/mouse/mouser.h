@@ -23,9 +23,9 @@ void mouse_scroll(int amount);
 void mouse_scroll2(int amount, CGScrollEventUnit units);
 void mouse_scroll3(int amount, CGScrollEventUnit units, double duration);
 
-void mouse_horizontal_scroll(size_t amount);
-void mouse_horizontal_scroll2(size_t amount, CGScrollEventUnit units);
-void mouse_horizontal_scroll3(size_t amount, CGScrollEventUnit units, double duration);
+void mouse_horizontal_scroll(int amount);
+void mouse_horizontal_scroll2(int amount, CGScrollEventUnit units);
+void mouse_horizontal_scroll3(int amount, CGScrollEventUnit units, double duration);
 
 void mouse_click_down();
 void mouse_click_down2(CGPoint point);
