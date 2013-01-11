@@ -14,6 +14,7 @@ static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
 static const double DEFAULT_MAGNIFICATION = 2.0; // factor
 static const double PINCH_STEPS           = 50;
+static const double ROTATION_STEPS        = 50;
 
 #define NEW_GESTURE(name) CGEventRef name = CGEventCreate(nil);	CHANGE(name, kCGEventGesture);
 #define NEW_EVENT(type,point,button) CGEventCreateMouseEvent(nil,type,point,button)
@@ -565,6 +566,34 @@ mouse_rotate3(
 	      double duration
 	      )
 {
+  switch (direction)
+    {
+    case kCGRotateClockwise:
+      angle = -(angle);
+      break;
+    case kCGRotateCounterClockwise:
+      break;
+    default:
+      return;
+    }
+
+  mouse_gesture(point, (FPS / 10), ^(void) {
+      NEW_GESTURE(rotation);
+      CGEventSetIntegerValueField(rotation, kCGEventGestureType, kCGGestureTypeRotation);
+
+      size_t steps       = ROTATION_STEPS;
+      double step_size   = angle / steps;
+      double step_period = (duration / steps) * 1000000;
+
+      CGEventSetDoubleValueField(rotation, kCGEventGestureRotationValue, step_size);
+
+      for (size_t i = 0; i < steps; i++) {
+        POST(rotation);
+	usleep(step_period);
+      }
+
+      RELEASE(rotation);
+    });
 }
 
 void

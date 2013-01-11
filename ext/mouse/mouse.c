@@ -1,23 +1,15 @@
 #include "mouser.h"
 #include "ruby.h"
 
-static VALUE rb_mMouse;
-static VALUE rb_cCGPoint;
-static ID sel_x;
-static ID sel_y;
-static ID sel_to_point;
-static ID sel_new;
+static VALUE rb_mMouse, rb_cCGPoint;
 
-static VALUE sym_pixel;
-static VALUE sym_line;
-static VALUE sym_up;
-static VALUE sym_down;
-static VALUE sym_left;
-static VALUE sym_right;
-static VALUE sym_zoom;
-static VALUE sym_unzoom;
-static VALUE sym_expand;
-static VALUE sym_contract;
+static ID sel_x, sel_y, sel_to_point, sel_new;
+
+static VALUE sym_pixel, sym_line,
+  sym_up, sym_down, sym_left, sym_right,
+  sym_zoom, sym_unzoom, sym_expand, sym_contract,
+  sym_cw, sym_clockwise, sym_clock_wise,
+  sym_ccw, sym_counter_clockwise, sym_counter_clock_wise;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -679,6 +671,48 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
   return CURRENT_POSITION;
 }
 
+static
+VALUE
+rb_mouse_rotate(int argc, VALUE* argv, VALUE self)
+{
+  if (argc < 2)
+    rb_raise(rb_eArgError, "wrong number of arguments (%d for 2+)", argc);
+
+  CGRotateDirection direction = kCGRotateNone;
+  VALUE             input_dir = argv[0];
+  if (
+      input_dir == sym_cw ||
+      input_dir == sym_clockwise ||
+      input_dir == sym_clock_wise
+      )
+    direction = kCGRotateClockwise;
+  else if (
+      input_dir == sym_ccw ||
+      input_dir == sym_counter_clockwise ||
+      input_dir == sym_counter_clock_wise
+	   )
+    direction = kCGRotateCounterClockwise;
+  else
+    rb_raise(
+	     rb_eArgError,
+	     "invalid rotation direction `%s'",
+	     rb_id2name(SYM2ID(input_dir))
+	     );
+
+  double angle = NUM2DBL(argv[1]);
+
+  if (argc == 2) {
+    mouse_rotate(direction, angle);
+    return CURRENT_POSITION;
+  }
+
+  CGPoint point = rb_mouse_unwrap_point(argv[2]);
+  if (argc == 3) {
+    mouse_rotate2(direction, angle, point);
+    return CURRENT_POSITION;
+  }
+
+  mouse_rotate3(direction, angle, point, NUM2DBL(argv[3]));
   return CURRENT_POSITION;
 }
 
@@ -708,6 +742,13 @@ Init_mouse()
   sym_unzoom   = ID2SYM(rb_intern("unzoom"));
   sym_expand   = ID2SYM(rb_intern("expand"));
   sym_contract = ID2SYM(rb_intern("contract"));
+
+  sym_cw                 = ID2SYM(rb_intern("cw"));
+  sym_clockwise          = ID2SYM(rb_intern("clockwise"));
+  sym_clock_wise         = ID2SYM(rb_intern("clock_wise"));
+  sym_ccw                = ID2SYM(rb_intern("ccw"));
+  sym_counter_clockwise  = ID2SYM(rb_intern("counter_clockwise"));
+  sym_counter_clock_wise = ID2SYM(rb_intern("counter_clock_wise"));
 
 
   /*
@@ -749,6 +790,7 @@ Init_mouse()
 
   rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
   rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
+  rb_define_method(rb_mMouse, "rotate",               rb_mouse_rotate,               -1);
 
   rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");
   rb_define_alias(rb_mMouse, "right_click_up",        "secondary_click_up");
