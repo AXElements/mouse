@@ -118,8 +118,11 @@ rb_mouse_drag_to(int argc, VALUE *argv, VALUE self)
  * Returns number of lines scrolled. A positive `amount` will scroll up
  * and a negative `amount` will scroll down.
  *
+ * An animation duration can also be specified.
+ *
  * @param amount [Number]
  * @param units [Symbol] `:pixel` or `:line` (_default_: `:line` ) (__optional__)
+ * @param duration [Float] (_default_: `0.2`) (__optional__)
  * @return [Number]
  */
 static
@@ -133,27 +136,27 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
 
   if (argc == 1) {
     mouse_scroll(amt);
-    return argv[0];
-  }
 
-  VALUE units = argv[1];
+  } else {
+    VALUE             input_units = argv[1];
+    CGScrollEventUnit units;
 
-  if (argc == 2) {
-    if (units == sym_pixel)
-      mouse_scroll2(amt, kCGScrollEventUnitPixel);
-    else if (units == sym_line)
-      mouse_scroll2(amt, kCGScrollEventUnitLine);
+    if (input_units == sym_pixel)
+      units = kCGScrollEventUnitPixel;
+    else if (input_units == sym_line)
+      units = kCGScrollEventUnitLine;
     else
-      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
+      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(input_units));
+
+    if (argc == 2)
+      mouse_scroll2(amt, units);
+    else
+      mouse_scroll3(amt, units, NUM2DBL(argv[2]));
   }
 
-  if (argc == 3) {
-    double duration = NUM2DBL(argv[2]);
+  return argv[0];
+}
 
-    if (units == sym_pixel)
-      mouse_scroll3(amt, kCGScrollEventUnitPixel, duration);
-    else if (units == sym_line)
-      mouse_scroll3(amt, kCGScrollEventUnitLine, duration);
     else
       rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(units));
   }
