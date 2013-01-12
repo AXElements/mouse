@@ -85,9 +85,9 @@ change in the future if there are enough complaints.
 
 ## TODO
 
-  * More mouse gesture support
-  * Make animation duration accurate (current naiveté has a bit of error)
-  * Import test app and specialize so we can have better tests
+- [ ] More mouse gesture support
+- [ ] Make animation duration accurate (current naiveté has a bit of error)
+- [ ] Import test app and specialize so we can have better tests
 
 
 ## Copyright
