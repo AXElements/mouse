@@ -22,7 +22,7 @@ testing; this is the purpose of the
 
     Mouse.current_position # => #<CGPoint x=873.2 y=345.0>
 
-    # positions can be given as a an array with two points, or a CGPoint
+    # positions can be given as an array with two points, or a CGPoint
     Mouse.move_to [10, 10]
     Mouse.move_to CGPoint.new(10, 10)
 
