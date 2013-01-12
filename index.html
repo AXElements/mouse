@@ -1,70 +1,162 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>mouse by AXElements</title>
+  </head>
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
-
-  <title>MRMouse</title>
-  <meta name="description" content="High Level Mouse Manipulation via CGEvents">
-
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
-</head>
-
-<body>
-
-  <div class="wrapper">
-    <header>
-      <h1 class="title">MRMouse</h1>
-    </header>
+  <body>
     <div id="container">
-      <p class="tagline">High Level Mouse Manipulation via CGEvents</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/ferrous26/MRMouse/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/ferrous26/MRMouse" class="code">view MRMouse on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <p>A port of mouse.rb from <a href="http://github.com/Marketcircle/AXElements">AXElements</a>,
+      <div class="inner">
+
+        <header>
+          <h1>mouse</h1>
+          <h2>High Level Mouse Manipulation via CGEvents</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/AXElements/mouse/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/AXElements/mouse/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/AXElements/mouse" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>mouse</h1>
+
+<p>A port of mouse.rb from <a href="http://github.com/Marketcircle/AXElements">AXElements</a>,
 but cleaned up and rewritten in C to be more portable across languages and
 runtimes.</p>
 
-<p>Not much to see right now.</p>
+<p>By itself, the <code>mouse</code> gem is not that useful; but in combination
+with a gem for discovering the positions of things (like buttons) on
+the screen, this gem is very powerful and can be used for tasks such
+as automated functional
+testing; this is the purpose of the
+<a href="http://github.com/Marketcircle/AXElements">AXElements</a> project.</p>
 
-<div class="highlight">
-<pre><span class="n">mouse_move_to</span><span class="p">(</span><span class="n">CGPointMake</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">));</span>
-<span class="n">mouse_click</span><span class="p">();</span>
-</pre>
-</div>
+<p><a href="http://rdoc.info/gems/mouse/frames">Documentation</a></p>
 
-        </article>
+<p><a href="https://codeclimate.com/github/AXElements/mouse"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a></p>
+
+<h2>Examples</h2>
+
+<pre><code>require 'mouse'
+
+Mouse.current_position # =&gt; #&lt;CGPoint x=873.2 y=345.0&gt;
+
+# positions can be given as an array with two points, or a CGPoint
+Mouse.move_to [10, 10]
+Mouse.move_to CGPoint.new(10, 10)
+
+# optionally specify how long it should take the mouse to move
+Mouse.move_to [800, 300], 0.2
+
+Mouse.click
+Mouse.double_click
+Mouse.triple_click
+
+# secondary_click and right_click are aliases to the same method
+Mouse.secondary_click
+Mouse.right_click
+
+# positive number scrolls up, negative number scrolls down
+Mouse.scroll 10
+Mouse.scroll -10
+
+# perform horizontal scrolling as well
+# positive number scrolls left, negative number scrolls right
+Mouse.horizontal_scroll 10
+Mouse.horizontal_scroll -10
+
+# optionally specify units for scroll amount, :pixel or :line
+Mouse.scroll 10, :pixels
+Mouse.scroll -10, :pixels
+
+# just like a two finger double tap
+Mouse.smart_magnify
+Mouse.smart_magnify [600, 500]
+
+# pinch-to-zoom
+Mouse.pinch :zoom
+Mouse.pinch :expand, 2
+
+# pinch-to-unzoom
+Mouse.pinch :unzoom, 2.0, 5.0
+Mouse.pinch :contract, 1.0
+
+# even perform rotation gestures!
+Mouse.rotate :clockwise, 90
+Mouse.rotate :counter_clockwise, 180
+Mouse.rotate :cw, 360
+
+# swipe, swipe, swipe
+Mouse.swipe :up
+Mouse.swipe :down
+Mouse.swipe :left
+Mouse.swipe :right
+</code></pre>
+
+<p>See the <a href="http://rdoc.info/gems/mouse/Mouse">Mouse Documentation</a> for
+more details.</p>
+
+<p>You may have noticed that when you ask the mouse to move to a specific
+location that it may not end up at the exact co-ordinates, but it will
+be close (distance of less than 1). This is by design, but that may
+change in the future if there are enough complaints.</p>
+
+<h2>TODO</h2>
+
+<ul>
+<li>[ ] More mouse gesture support</li>
+<li>[ ] Make animation duration accurate (current naiveté has a bit of error)</li>
+<li>[ ] Import test app and specialize so we can have better tests</li>
+</ul><h2>Copyright</h2>
+
+<p>Copyright (c) 2012, Mark Rada
+All rights reserved.</p>
+
+<p>Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:</p>
+
+<ul>
+<li>Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.</li>
+<li>Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.</li>
+<li>Neither the name of Mark Rada nor the names of its
+contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.</li>
+</ul><p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Rada BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+        </section>
+
+        <footer>
+          mouse is maintained by <a href="https://github.com/AXElements">AXElements</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
       </div>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/ferrous26" class="avatar"><img src="https://secure.gravatar.com/avatar/76724aec9d42b6c956ab03a94ff4c060?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" width="48" height="48"/></a> <a href="https://github.com/ferrous26">ferrous26</a> maintains <a href="https://github.com/ferrous26/MRMouse">MRMouse</a></p>
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/ferrous26/MRMouse/tarball/master" class="tar">tar</a><a href="https://github.com/ferrous26/MRMouse/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
-
-  
-</body>
+  </body>
 </html>
