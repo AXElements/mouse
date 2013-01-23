@@ -1,6 +1,6 @@
 # mouse
 
-A port of mouse.rb from [AXElements](http://github.com/Marketcircle/AXElements),
+A port of mouse.rb from [AXElements](http://github.com/AXElements/AXElements),
 but cleaned up and rewritten in C to be more portable across languages and
 runtimes.
 
@@ -9,7 +9,7 @@ with a gem for discovering the positions of things (like buttons) on
 the screen, this gem is very powerful and can be used for tasks such
 as automated functional
 testing; this is the purpose of the
-[AXElements](http://github.com/Marketcircle/AXElements) project.
+[AXElements](http://github.com/AXElements/AXElements) project.
 
 [Documentation](http://rdoc.info/gems/mouse/frames)
 
