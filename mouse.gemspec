@@ -29,7 +29,7 @@ Originally extracted from the AXElements project.
                   ]
   s.test_files  = Dir.glob('test/**/test_*.rb') + [ 'test/helper.rb' ]
 
-  s.add_development_dependency 'yard', '~> 0.8.3'
+  s.add_development_dependency 'yard', '~> 0.8.4'
   s.add_development_dependency 'kramdown', '~> 0.14.1'
-  s.add_development_dependency 'rake-compiler', '~> 0.8.1'
+  s.add_development_dependency 'rake-compiler', '~> 0.8.3'
 end
