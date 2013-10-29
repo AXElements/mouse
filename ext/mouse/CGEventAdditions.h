@@ -108,7 +108,7 @@ enum {
   kCGGestureTypeGestureEnded   = 62,
 };
 
-
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_9
 /*!
  * @enum CGGesturePhase
  * @abstract Gesture phases
@@ -127,6 +127,7 @@ enum {
   kCGGesturePhaseEnded     = kIOHIDEventPhaseEnded,
   kCGGesturePhaseCancelled = kIOHIDEventPhaseCancelled,
 };
+#endif
 
 
 /*!
