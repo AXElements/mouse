@@ -1,3 +1,7 @@
+# 2.0.1 - Sea Lion compatability
+
+  * Do not redefine constants Apple has exposed on Sea Lion (@tbartelmess)
+
 # 2.0.0 - Gestures
 
   * Add `Mouse.smart_magnify` to simulate two finger double taps
