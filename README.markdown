@@ -93,7 +93,7 @@ change in the future if there are enough complaints.
 
 ## Copyright
 
-Copyright (c) 2012, Mark Rada
+Copyright (c) 2012-2013, Mark Rada
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
