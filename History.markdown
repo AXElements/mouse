@@ -1,3 +1,7 @@
+# 3.0.0 - The death of MacRuby
+
+  * Remove MacRuby support (sort of)
+
 # 2.0.1 - Sea Lion compatability
 
   * Do not redefine constants Apple has exposed on Sea Lion (@tbartelmess)
