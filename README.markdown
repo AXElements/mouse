@@ -15,6 +15,7 @@ testing; this is the purpose of the
 
 [![Code Climate](https://codeclimate.com/github/AXElements/mouse.png)](https://codeclimate.com/github/AXElements/mouse)
 [![Dependency Status](https://gemnasium.com/AXElements/mouse.png)](https://gemnasium.com/AXElements/mouse)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AXElements/mouse/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
 ## Examples
@@ -119,7 +120,3 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AXElements/mouse/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
