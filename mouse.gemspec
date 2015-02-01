@@ -28,8 +28,4 @@ Originally extracted from the AXElements project.
                    '.yardopts'
                   ]
   s.test_files  = Dir.glob('test/**/test_*.rb') + [ 'test/helper.rb' ]
-
-  s.add_development_dependency 'yard', '~> 0.8.7'
-  s.add_development_dependency 'kramdown', '~> 1.2.0'
-  s.add_development_dependency 'rake-compiler', '~> 0.9.1'
 end
