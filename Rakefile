@@ -1,15 +1,15 @@
-task :default => :test
+task default: :test
 
 require 'rake/clean'
-CLEAN.include '*.plist', '*.gch'
+CLOBBER.include '*.plist', '*.gch'
 
 desc 'Run the Clang static analyzer'
 task :analyze do
-  sh "clang --analyze ext/mouse/mouser.c"
+  sh 'clang --analyze ext/mouse/mouser.c'
 end
 
 desc 'Startup an IRb console with Mouse loaded'
-task :console => [:compile] do
+task console: :compile do
   sh 'irb -Ilib -rmouse'
 end
 
@@ -18,8 +18,7 @@ Rake::TestTask.new do |t|
   t.libs << '.'
   t.pattern = 'test/*_test.rb'
 end
-task :test => :compile
-
+task test: :compile
 
 # Gem stuff
 
