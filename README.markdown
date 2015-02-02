@@ -92,9 +92,20 @@ change in the future if there are enough complaints.
 - [ ] Import test app and specialize so we can have better tests
 
 
+## Security
+
+mouse is cryptographically signed. To be sure the gem you install
+hasn’t been tampered with you will want to add my public key (if you
+haven’t already) as a trusted certificate for Rubygems:
+
+```sh
+gem cert --add <(curl -Ls https://raw.github.com/AXElements/mouse/master/certs/markrada26@gmail.com.pem)
+gem install mouse -P HighSecurity
+```
+
 ## Copyright
 
-Copyright (c) 2012-2013, Mark Rada
+Copyright (c) 2012-2015, Mark Rada
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
