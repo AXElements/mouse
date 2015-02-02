@@ -18,6 +18,11 @@ Originally extracted from the AXElements project.
   s.licenses    = ['BSD 3-clause']
   s.has_rdoc    = 'yard'
 
+  s.cert_chain  = ['certs/markrada26@gmail.com.pem']
+  if $PROGRAM_NAME =~ /gem\z/
+    s.signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
+  end
+
   s.extensions  = ['ext/mouse/extconf.rb']
   s.files       = Dir.glob('lib/**/*.rb') +
                   Dir.glob('ext/**/*.{c,h,rb}') +
@@ -28,4 +33,6 @@ Originally extracted from the AXElements project.
                    '.yardopts'
                   ]
   s.test_files  = Dir.glob('test/**/test_*.rb') + [ 'test/helper.rb' ]
+
+  s.required_ruby_version = '>= 2.0.0'
 end
