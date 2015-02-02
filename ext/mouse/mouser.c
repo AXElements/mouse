@@ -82,9 +82,10 @@ mouse_animate(
     mouse_sleep(1);
     current_time = NOW;
 
-    // this is a safety
-    if (CFDateGetTimeIntervalSinceDate(NOW, start) > (duration + 1))
-      break;
+        // this is a safety
+        const double boundary = duration + 1;
+        if (CFDateGetTimeIntervalSinceDate(current_time, start) > boundary)
+            break;
 
     RELEASE(current_time);
     current_time = NULL;
