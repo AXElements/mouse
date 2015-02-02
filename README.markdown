@@ -15,6 +15,7 @@ testing; this is the purpose of the
 
 [![Code Climate](https://codeclimate.com/github/AXElements/mouse.png)](https://codeclimate.com/github/AXElements/mouse)
 [![Dependency Status](https://gemnasium.com/AXElements/mouse.png)](https://gemnasium.com/AXElements/mouse)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AXElements/mouse/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
 ## Examples
