@@ -17,6 +17,7 @@ Originally extracted from the AXElements project.
   s.homepage    = 'http://github.com/AXElements/mouse'
   s.licenses    = ['BSD 3-clause']
   s.has_rdoc    = 'yard'
+  s.platform    = Gem::Platform::RUBY # local
 
   s.cert_chain  = ['certs/markrada26@gmail.com.pem']
   if $PROGRAM_NAME =~ /gem\z/

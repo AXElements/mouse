@@ -26,16 +26,16 @@ task :test => :compile
 require 'rubygems/package_task'
 mouse_spec = Gem::Specification.load('mouse.gemspec')
 
-Gem::PackageTask.new(mouse_spec) { }
-
-desc 'Build and install gem (not including deps)'
-task :install => :gem do
-  require 'rubygems/installer'
-  Gem::Installer.new("pkg/#{mouse_spec.file_name}").install
-end
+Gem::PackageTask.new(mouse_spec) {}
 
 require 'rake/extensiontask'
 Rake::ExtensionTask.new('mouse', mouse_spec) do |t|
   t.lib_dir = 'lib/mouse'
+  t.ext_dir = 'ext/mouse'
 end
 
+desc 'Build and install gem (not including deps)'
+task install: :gem do
+  require 'rubygems/installer'
+  Gem::Installer.new("pkg/#{mouse_spec.file_name}").install
+end
