@@ -45,9 +45,15 @@ rb_mouse_current_position(const VALUE self)
 /*
  * Move the mouse cursor to the given co-ordinates
  *
- * @param point [CGPoint,Array(Number,Number),#to_point]
- * @param duration [Number] animation time, in seconds (__optional__)
- * @return [CGPoint]
+ * The default duration is 0.2 seconds.
+ *
+ * @overload move_to(point)
+ *   @param point [CGPoint,Array(Number,Number),#to_point]
+ *   @return [CGPoint]
+ * @overload move_to(point, duration)
+ *   @param point [CGPoint,Array(Number,Number),#to_point]
+ *   @param duration [Number] animation time, in seconds
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -95,20 +101,28 @@ rb_mouse_drag_to(const int argc, VALUE* const argv, const VALUE self)
 
 /*
  * @note Scrolling by `:pixel` may not actually be by real pixels, but instead
- *       correspond to Cocoa co-ords (I don't have a retina display, so I haven't
- *       checked it out yet).
+ *       correspond to Cocoa co-ords (I don't have a retina display, so I
+ *       haven't checked it out yet).
  *
  * Generate `amount` scroll events at the current cursor position
  *
- * Returns number of lines scrolled. A positive `amount` will scroll up
- * and a negative `amount` will scroll down.
+ * Returns number of lines/pixels scrolled, default `units` are by `line`.
+ * A positive `amount` will scroll up and a negative `amount` will scroll down.
  *
- * An animation duration can also be specified.
+ * An animation duration can also be specified, which defaults to 0.2 seconds.
  *
- * @param amount [Number]
- * @param units [Symbol] `:pixel` or `:line` (_default_: `:line` ) (__optional__)
- * @param duration [Float] (_default_: `0.2`) (__optional__)
- * @return [Number]
+ * @overload scroll(amount)
+ *   @param amount [Number]
+ *   @return [Number]
+ * @overload scroll(amount, units)
+ *   @param amount [Number]
+ *   @param units [Symbol] `:pixel` or `:line`
+ *   @return [Number]
+ * @overload scroll(amount, units, duration)
+ *   @param amount [Number]
+ *   @param units [Symbol] `:pixel` or `:line`
+ *   @param duration [Number] animation time, in seconds
+ *   @return [Number]
  */
 static
 VALUE
@@ -153,15 +167,23 @@ rb_mouse_scroll(const int argc, VALUE* const argv, const VALUE self)
  *
  * Generate `amount` of horizontal scroll events at the current cursor position
  *
- * Returns number of lines scrolled. A positive `amount` will scroll left
- * and a negative `amount` will scroll right.
+ * Returns number of lines/pixels scrolled, default `units` are by `line`.
+ * A positive `amount` will scroll up and a negative `amount` will scroll down.
  *
- * An animation duration can also be specified.
+ * An animation duration can also be specified, which defaults to 0.2 seconds.
  *
- * @param amount [Number]
- * @param units [Symbol] `:pixel` or `:line` (_default_: `:line` ) (__optional__)
- * @param duration [Float] (_default_: `0.2`) (__optional__)
- * @return [Number]
+ * @overload horizontal_scroll(amount)
+ *   @param amount [Number]
+ *   @return [Number]
+ * @overload horizontal_scroll(amount, units)
+ *   @param amount [Number]
+ *   @param units [Symbol] `:pixel` or `:line`
+ *   @return [Number]
+ * @overload horizontal_scroll(amount, units, duration)
+ *   @param amount [Number]
+ *   @param units [Symbol] `:pixel` or `:line`
+ *   @param duration [Number] animation time, in seconds
+ *   @return [Number]
  */
 static
 VALUE
@@ -206,10 +228,14 @@ rb_mouse_horizontal_scroll(const int argc, VALUE* const argv, const VALUE self)
  * to inject some behaviour between the down and up click events.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload click_down()
+ *   @return [CGPoint]
+ * @overload click_down(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -234,10 +260,14 @@ rb_mouse_click_down(const int argc, VALUE* const argv, const VALUE self)
  * to inject some behaviour between the down and up click events.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload click_up()
+ *   @return [CGPoint]
+ * @overload click_up(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -259,10 +289,14 @@ rb_mouse_click_up(const int argc, VALUE* const argv, const VALUE self)
  * Generate a regular click event (both up and down events)
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload click()
+ *   @return [CGPoint]
+ * @overload click()
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -288,10 +322,14 @@ rb_mouse_click(const int argc, VALUE* const argv, const VALUE self)
  * events.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload secondary_click_down()
+ *   @return [CGPoint]
+ * @overload secondary_click_down(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -318,10 +356,14 @@ rb_mouse_secondary_click_down(const int argc,
  * you want to inject some behaviour between the down and up click events.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload secondary_click_up()
+ *   @return [CGPoint]
+ * @overload secondary_click_up(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -345,10 +387,14 @@ rb_mouse_secondary_click_up(const int argc, VALUE* const argv, const VALUE self)
  * Secondary click is often referred to as "right click".
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload secondary_click()
+ *   @return [CGPoint]
+ * @overload secondary_click(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -374,10 +420,14 @@ rb_mouse_secondary_click(const int argc, VALUE* const argv, const VALUE self)
  * events.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload arbitrary_click_down()
+ *   @return [CGPoint]
+ * @overload arbitrary_click_down(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -410,10 +460,14 @@ rb_mouse_arbitrary_click_down(const int argc,
  * you want to inject some behaviour between the down and up click events.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload arbitrary_click_up()
+ *   @return [CGPoint]
+ * @overload arbitrary_click_up(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -454,11 +508,16 @@ rb_mouse_arbitrary_click_up(const int argc,
  * documentation for the most up to date list.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param button [Number,#to_i]
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload arbitrary_click(button)
+ *   @param button [Number,#to_i]
+ *   @return [CGPoint]
+ * @overload arbitrary_click(button, point)
+ *   @param button [Number,#to_i]
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -491,10 +550,14 @@ rb_mouse_arbitrary_click(const int argc,
  * It doesn't matter if you don't have a middle mouse button.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload middle_click()
+ *   @return [CGPoint]
+ * @overload middle_click(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -519,11 +582,16 @@ rb_mouse_middle_click(const int argc, VALUE* const argv, const VALUE self)
  * a single event with the given number of clicks.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param num_clicks [Number,#to_i]
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload multi_click(num_clicks)
+ *   @param num_clicks [Number,#to_i]
+ *   @return [CGPoint]
+ * @overload multi_click(num_clicks, point)
+ *   @param num_clicks [Number,#to_i]
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -536,7 +604,7 @@ rb_mouse_multi_click(const int argc, VALUE* const argv, const VALUE self)
     }
 
     // TODO: there has got to be a more idiomatic way to do this coercion
-    size_t num_clicks = NUM2SIZET(argv[0]);
+    const size_t num_clicks = NUM2SIZET(argv[0]);
 
     switch (argc) {
     case 1:
@@ -558,10 +626,14 @@ rb_mouse_multi_click(const int argc, VALUE* const argv, const VALUE self)
  * how a human would have to generate a double click event.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload double_click()
+ *   @return [CGPoint]
+ * @overload double_click(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -588,10 +660,14 @@ rb_mouse_double_click(const int argc, VALUE* const argv, const VALUE self)
  * triple click event.
  *
  * You can optionally specify a point to click; the mouse cursor will
- * instantly jump to the given point.
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload triple_click()
+ *   @return [CGPoint]
+ * @overload triple_click(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -615,11 +691,15 @@ rb_mouse_triple_click(const int argc, VALUE* const argv, const VALUE self)
 /*
  * Perform a smart magnify (double tap on trackpad)
  *
- * You can optionally specify the point on the screen where to perform
- * the smart magnification.
+ * You can optionally specify a point to click; the mouse cursor will
+ * instantly jump to the given point; otherwise the click event happens
+ * at the current cursor position.
  *
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @return [CGPoint]
+ * @overload smart_magnify()
+ *   @return [CGPoint]
+ * @overload smart_magnify(point)
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -642,14 +722,24 @@ rb_mouse_smart_magnify(const int argc, VALUE* const argv, const VALUE self)
  *
  * You can optionally specify a point on screen for the mouse
  * pointer to be moved to before the gesture begins. The movement will
- * be instantaneous.
+ * be instantaneous; otherwise the click event happens
+ * at the current cursor position.
  *
- * You can also optionally specify the duration of the swipe event.
+ * You can also optionally specify the duration of the swipe event;
+ * the default `duration` is 0.2 seconds.
  *
- * @param direction [Symbol]
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @param duration [Float] (_default_: `0.2`) (__optional__)
- * @return [CGPoint]
+ * @overload swipe(direction)
+ *   @param direction [Symbol]
+ *   @return [CGPoint]
+ * @overload swipe(direction, point)
+ *   @param direction [Symbol]
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
+ * @overload swipe(direction, point, duration)
+ *   @param direction [Symbol]
+ *   @param point [CGPoint]
+ *   @param duration [Float]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -696,19 +786,32 @@ rb_mouse_swipe(const int argc, VALUE* const argv, const VALUE self)
  *
  * Magnification is a relative magnification setting. A zoom value of
  * `1.0` means `1.0` more than the current zoom level. `2.0` would be
- * `2.0` levels higher than the current zoom.
+ * `2.0` levels higher than the current zoom. Default is `1.0`.
  *
  * You can also optionally specify a point on screen for the mouse
  * pointer to be moved to before the gesture begins. The movement will
- * be instantaneous.
+ * be instantaneous. Default `point` is {#current_position}.
  *
- * An animation duration can also be specified.
+ * An animation duration can also be specified. The default is 0.2 seconds.
  *
- * @param direction [Symbol]
- * @param magnification [Float] (_default_: `1.0`) (__optional__)
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @param duration [Float] (_default_: `0.2`) (__optional__)
- * @return [CGPoint]
+ * @overload pinch(direction)
+ *   @param direction [Symbol]
+ *   @return [CGPoint]
+ * @overload pinch(direction, magnification)
+ *   @param direction [Symbol]
+ *   @param magnification [Float]
+ *   @return [CGPoint]
+ * @overload pinch(direction, magnification, point)
+ *   @param direction [Symbol]
+ *   @param magnification [Float]
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
+ * @overload pinch(direction, magnification, point, duration)
+ *   @param direction [Symbol]
+ *   @param magnification [Float]
+ *   @param point [CGPoint]
+ *   @param duration [Float]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -766,15 +869,25 @@ rb_mouse_pinch(const int argc, VALUE* const argv, const VALUE self)
  *
  * You can also optionally specify a point on screen for the mouse
  * pointer to be moved to before the gesture begins. The movement will
- * be instantaneous.
+ * be instantaneous. Default `point` is {#current_position}.
  *
- * An animation duration can also be specified.
+ * An animation duration can also be specified. The default is 0.2 seconds.
  *
- * @param direction [Symbol]
- * @param angle [Float]
- * @param point [CGPoint] (_default_: {#current_position}) (__optional__)
- * @param duration [Float] (_default_: `0.2`) (__optional__)
- * @return [CGPoint]
+ * @overload rotate(direction, angle)
+ *   @param direction [Symbol]
+ *   @param angle [Float]
+ *   @return [CGPoint]
+ * @overload rotate(direction, angle, point)
+ *   @param direction [Symbol]
+ *   @param angle [Float]
+ *   @param point [CGPoint]
+ *   @return [CGPoint]
+ * @overload rotate(direction, angle, point, duration)
+ *   @param direction [Symbol]
+ *   @param angle [Float]
+ *   @param point [CGPoint]
+ *   @param duration [Float]
+ *   @return [CGPoint]
  */
 static
 VALUE
@@ -851,7 +964,6 @@ Init_mouse()
     sym_ccw                = ID2SYM(rb_intern("ccw"));
     sym_counter_clockwise  = ID2SYM(rb_intern("counter_clockwise"));
     sym_counter_clock_wise = ID2SYM(rb_intern("counter_clock_wise"));
-
 
     /*
      * Document-module: Mouse
