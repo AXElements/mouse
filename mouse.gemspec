@@ -19,11 +19,6 @@ Originally extracted from the AXElements project.
   s.has_rdoc    = 'yard'
   s.platform    = Gem::Platform::RUBY # local
 
-  s.cert_chain  = ['certs/markrada26@gmail.com.pem']
-  if $PROGRAM_NAME =~ /gem\z/
-    s.signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
-  end
-
   s.extensions  = ['ext/mouse/extconf.rb']
   s.files       = Dir.glob('lib/**/*.rb') +
                   Dir.glob('ext/**/*.{c,h,rb}') +
