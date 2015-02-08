@@ -1,3 +1,11 @@
+# 4.0.0 - Scaling Yosemite
+
+  * Finish removing MacRuby support
+  * Cleanup coding style and doocumentation, and also enable stricter warnings
+  * Begin signing the gem
+  * Begin distributing pre-compiled versions of the gem
+  * Yosemite compatability
+
 # 3.0.0 - The death of MacRuby
 
   * Remove MacRuby support (sort of)
