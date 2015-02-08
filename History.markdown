@@ -1,3 +1,7 @@
+# 4.0.1 - Dash Docs
+
+  * Use the default markdown provider when generating documentation
+
 # 4.0.0 - Scaling Yosemite
 
   * Finish removing MacRuby support
