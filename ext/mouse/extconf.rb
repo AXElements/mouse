@@ -2,6 +2,8 @@ require 'mkmf'
 
 $CFLAGS << ' -std=c99 -Weverything'
 $CFLAGS << ' -Wno-disabled-macro-expansion -Wno-gnu -Wno-documentation'
+# @todo REALLY NEED TO CLEAR ALL THESE WARNINGS
+$CFLAGS << ' -Wno-conversion'
 
 $LIBS   << ' -framework Foundation'
 $LIBS   << ' -framework ApplicationServices'
