@@ -26,8 +26,8 @@ class MouseTest < MiniTest::Unit::TestCase
     start_time  = Time.now
     start_point = Mouse.current_position
 
-    Mouse.move_to [10,10], 1
-    assert_in_delta 1, (Time.now - start_time), 0.2
+    Mouse.move_to [10, 10], 1
+    assert_in_delta 1, (Time.now - start_time), 0.3
 
     start_time = Time.now
     Mouse.move_to start_point, 0.1
