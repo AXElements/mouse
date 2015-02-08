@@ -1,0 +1,8 @@
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
