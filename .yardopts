@@ -2,7 +2,6 @@
 --no-output
 --verbose
 --markup markdown
---markup-provider kramdown
 --readme README.markdown
 --hide-void-return
 lib/**/*.rb
