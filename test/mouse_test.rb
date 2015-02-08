@@ -15,11 +15,11 @@ class MouseTest < MiniTest::Unit::TestCase
   def test_mouse_move_to
     point = CGPoint.new(100, 100)
     Mouse.move_to point
-    assert_in_delta 0, distance(point,Mouse.current_position), 1.0
+    assert_in_delta 0, distance(point, Mouse.current_position), 1.0
 
-    point = CGPoint.new(rand(700)+150, rand(500)+100)
+    point = CGPoint.new(rand(700) + 150, rand(500) + 100)
     Mouse.move_to point
-    assert_in_delta 0, distance(point,Mouse.current_position), 1.0
+    assert_in_delta 0, distance(point, Mouse.current_position), 1.0
   end
 
   def test_mouse_move_to_accepts_duration_argument
