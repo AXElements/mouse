@@ -15,32 +15,19 @@ static VALUE sym_pixel, sym_line,
 
 static
 VALUE
-rb_mouse_wrap_point(CGPoint point)
+rb_mouse_wrap_point(const CGPoint point)
 {
-#if NOT_MACRUBY
-  return rb_struct_new(rb_cCGPoint, DBL2NUM(point.x), DBL2NUM(point.y));
-#else
-  return rb_funcall(rb_cCGPoint, sel_new, 2, DBL2NUM(point.x), DBL2NUM(point.y));
-#endif
+    return rb_struct_new(rb_cCGPoint, DBL2NUM(point.x), DBL2NUM(point.y));
 }
 
 static
 CGPoint
-rb_mouse_unwrap_point(VALUE point)
+rb_mouse_unwrap_point(const VALUE maybe_point)
 {
-  point = rb_funcall(point, sel_to_point, 0);
-
-#if NOT_MACRUBY
-  double x = NUM2DBL(rb_struct_getmember(point, sel_x));
-  double y = NUM2DBL(rb_struct_getmember(point, sel_y));
-  return CGPointMake(x, y);
-
-#else
-  CGPoint* ptr;
-  Data_Get_Struct(point, CGPoint, ptr);
-  return *ptr;
-
-#endif
+    const VALUE point = rb_funcall(maybe_point, sel_to_point, 0);
+    const double x = NUM2DBL(rb_struct_getmember(point, sel_x));
+    const double y = NUM2DBL(rb_struct_getmember(point, sel_y));
+    return CGPointMake(x, y);
 }
 
 /*
@@ -50,9 +37,9 @@ rb_mouse_unwrap_point(VALUE point)
  */
 static
 VALUE
-rb_mouse_current_position(VALUE self)
+rb_mouse_current_position(const VALUE self)
 {
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -64,22 +51,21 @@ rb_mouse_current_position(VALUE self)
  */
 static
 VALUE
-rb_mouse_move_to(int argc, VALUE *argv, VALUE self)
+rb_mouse_move_to(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      rb_raise(rb_eArgError, "move_to requires at least a one arg");
-      break;
+        rb_raise(rb_eArgError, "move_to requires at least a one arg");
+        break;
     case 1:
-      mouse_move_to(rb_mouse_unwrap_point(argv[0]));
-      break;
+        mouse_move_to(rb_mouse_unwrap_point(argv[0]));
+        break;
     case 2:
     default:
-      mouse_move_to2(rb_mouse_unwrap_point(argv[0]), NUM2DBL(argv[1]));
+        mouse_move_to2(rb_mouse_unwrap_point(argv[0]), NUM2DBL(argv[1]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -90,22 +76,21 @@ rb_mouse_move_to(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_drag_to(int argc, VALUE *argv, VALUE self)
+rb_mouse_drag_to(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      rb_raise(rb_eArgError, "drag_to requires at least a one arg");
-      break;
+        rb_raise(rb_eArgError, "drag_to requires at least a one arg");
+        break;
     case 1:
-      mouse_drag_to(rb_mouse_unwrap_point(argv[0]));
-      break;
+        mouse_drag_to(rb_mouse_unwrap_point(argv[0]));
+        break;
     case 2:
     default:
-      mouse_drag_to2(rb_mouse_unwrap_point(argv[0]), NUM2DBL(argv[1]));
+        mouse_drag_to2(rb_mouse_unwrap_point(argv[0]), NUM2DBL(argv[1]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -127,34 +112,38 @@ rb_mouse_drag_to(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
+rb_mouse_scroll(const int argc, VALUE* const argv, const VALUE self)
 {
-  if (argc == 0 || argc > 3)
-    rb_raise(rb_eArgError, "scroll requires 1..3 arguments, you gave %d", argc);
+    if (argc == 0 || argc > 3)
+        rb_raise(rb_eArgError,
+                 "scroll requires 1..3 arguments, you gave %d",
+                 argc);
 
-  int amt = NUM2INT(argv[0]);
+    const int amt = NUM2INT(argv[0]);
 
-  if (argc == 1) {
-    mouse_scroll(amt);
+    if (argc == 1) {
+        mouse_scroll(amt);
 
-  } else {
-    VALUE             input_units = argv[1];
-    CGScrollEventUnit units;
+    } else {
+        const VALUE input_units = argv[1];
+        CGScrollEventUnit units;
 
-    if (input_units == sym_pixel)
-      units = kCGScrollEventUnitPixel;
-    else if (input_units == sym_line)
-      units = kCGScrollEventUnitLine;
-    else
-      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(input_units));
+        if (input_units == sym_pixel)
+            units = kCGScrollEventUnitPixel;
+        else if (input_units == sym_line)
+            units = kCGScrollEventUnitLine;
+        else
+            rb_raise(rb_eArgError,
+                     "unknown units `%s'",
+                     rb_id2name(input_units));
 
-    if (argc == 2)
-      mouse_scroll2(amt, units);
-    else
-      mouse_scroll3(amt, units, NUM2DBL(argv[2]));
-  }
+        if (argc == 2)
+            mouse_scroll2(amt, units);
+        else
+            mouse_scroll3(amt, units, NUM2DBL(argv[2]));
+    }
 
-  return argv[0];
+    return argv[0];
 }
 
 /*
@@ -176,34 +165,38 @@ rb_mouse_scroll(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_horizontal_scroll(int argc, VALUE *argv, VALUE self)
+rb_mouse_horizontal_scroll(const int argc, VALUE* const argv, const VALUE self)
 {
-  if (argc == 0 || argc > 3)
-    rb_raise(rb_eArgError, "scroll requires 1..3 arguments, you gave %d", argc);
+    if (argc == 0 || argc > 3)
+        rb_raise(rb_eArgError,
+                 "scroll requires 1..3 arguments, you gave %d",
+                 argc);
 
-  int amt = NUM2INT(argv[0]);
+    const int amt = NUM2INT(argv[0]);
 
-  if (argc == 1) {
-    mouse_horizontal_scroll(amt);
+    if (argc == 1) {
+        mouse_horizontal_scroll(amt);
 
-  } else {
-    VALUE             input_units = argv[1];
-    CGScrollEventUnit units;
+    } else {
+        const VALUE input_units = argv[1];
+        CGScrollEventUnit units;
 
-    if (input_units == sym_pixel)
-      units = kCGScrollEventUnitPixel;
-    else if (input_units == sym_line)
-      units = kCGScrollEventUnitLine;
-    else
-      rb_raise(rb_eArgError, "unknown units `%s'", rb_id2name(input_units));
+        if (input_units == sym_pixel)
+            units = kCGScrollEventUnitPixel;
+        else if (input_units == sym_line)
+            units = kCGScrollEventUnitLine;
+        else
+            rb_raise(rb_eArgError,
+                     "unknown units `%s'",
+                     rb_id2name(input_units));
 
-    if (argc == 2)
-      mouse_horizontal_scroll2(amt, units);
-    else
-      mouse_horizontal_scroll3(amt, units, NUM2DBL(argv[2]));
-  }
+        if (argc == 2)
+            mouse_horizontal_scroll2(amt, units);
+        else
+            mouse_horizontal_scroll3(amt, units, NUM2DBL(argv[2]));
+    }
 
-  return argv[0];
+    return argv[0];
 }
 
 /*
@@ -220,19 +213,18 @@ rb_mouse_horizontal_scroll(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_click_down(int argc, VALUE *argv, VALUE self)
+rb_mouse_click_down(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_click_down();
-      break;
+        mouse_click_down();
+        break;
     case 1:
     default:
-      mouse_click_down2(rb_mouse_unwrap_point(argv[0]));
+        mouse_click_down2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -249,19 +241,18 @@ rb_mouse_click_down(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_click_up(int argc, VALUE *argv, VALUE self)
+rb_mouse_click_up(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_click_up();
-      break;
+        mouse_click_up();
+        break;
     case 1:
     default:
-      mouse_click_up(rb_mouse_unwrap_point(argv[0]));
+        mouse_click_up2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -275,19 +266,18 @@ rb_mouse_click_up(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_click(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_click();
-      break;
+        mouse_click();
+        break;
     case 1:
     default:
-      mouse_click2(rb_mouse_unwrap_point(argv[0]));
+        mouse_click2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -305,19 +295,20 @@ rb_mouse_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_secondary_click_down(int argc, VALUE* argv, VALUE self)
+rb_mouse_secondary_click_down(const int argc,
+                              VALUE* const argv,
+                              const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_secondary_click_down();
-      break;
+        mouse_secondary_click_down();
+        break;
     case 1:
     default:
-      mouse_secondary_click_down2(rb_mouse_unwrap_point(argv[0]));
+        mouse_secondary_click_down2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -334,19 +325,18 @@ rb_mouse_secondary_click_down(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_secondary_click_up(int argc, VALUE* argv, VALUE self)
+rb_mouse_secondary_click_up(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_secondary_click_up();
-      break;
+        mouse_secondary_click_up();
+        break;
     case 1:
     default:
-      mouse_secondary_click_up2(rb_mouse_unwrap_point(argv[0]));
+        mouse_secondary_click_up2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -362,19 +352,18 @@ rb_mouse_secondary_click_up(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_secondary_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_secondary_click(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_secondary_click();
-      break;
+        mouse_secondary_click();
+        break;
     case 1:
     default:
-      mouse_secondary_click2(rb_mouse_unwrap_point(argv[0]));
+        mouse_secondary_click2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -392,24 +381,26 @@ rb_mouse_secondary_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_arbitrary_click_down(int argc, VALUE* argv, VALUE self)
+rb_mouse_arbitrary_click_down(const int argc,
+                              VALUE* const argv,
+                              const VALUE self)
 {
-  if (argc == 0)
-    rb_raise(rb_eArgError, "arbitrary_click_down requires at least one arg");
+    if (argc == 0)
+        rb_raise(rb_eArgError,
+                 "arbitrary_click_down requires at least one arg");
 
-  uint_t button = NUM2INT(argv[0]);
+    const uint_t button = NUM2INT(argv[0]);
 
-  switch (argc)
-    {
+    switch (argc) {
     case 1:
-      mouse_arbitrary_click_down(button);
-      break;
+        mouse_arbitrary_click_down(button);
+        break;
     case 2:
     default:
-      mouse_arbitrary_click_down2(button, rb_mouse_unwrap_point(argv[1]));
+        mouse_arbitrary_click_down2(button, rb_mouse_unwrap_point(argv[1]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -426,24 +417,26 @@ rb_mouse_arbitrary_click_down(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_arbitrary_click_up(int argc, VALUE* argv, VALUE self)
+rb_mouse_arbitrary_click_up(const int argc,
+                            VALUE* const argv,
+                            const VALUE self)
 {
-  if (argc == 0)
-    rb_raise(rb_eArgError, "arbitrary_click_up requires at least one arg");
+    if (argc == 0)
+        rb_raise(rb_eArgError,
+                 "arbitrary_click_up requires at least one arg");
 
-  uint_t button = NUM2INT(argv[0]);
+    const uint_t button = NUM2INT(argv[0]);
 
-  switch (argc)
-    {
+    switch (argc) {
     case 1:
-      mouse_arbitrary_click_up(button);
-      break;
+        mouse_arbitrary_click_up(button);
+        break;
     case 2:
     default:
-      mouse_arbitrary_click_up2(button, rb_mouse_unwrap_point(argv[1]));
+        mouse_arbitrary_click_up2(button, rb_mouse_unwrap_point(argv[1]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -469,26 +462,27 @@ rb_mouse_arbitrary_click_up(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_arbitrary_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_arbitrary_click(const int argc,
+                         VALUE* const argv,
+                         const VALUE self)
 {
-  if (argc == 0) {
-    rb_raise(rb_eArgError, "arbitrary_click requires at least one arg");
-    return Qnil;
-  }
-
-  uint_t button = NUM2INT(argv[0]);
-
-  switch (argc)
-    {
-    case 1:
-      mouse_arbitrary_click(button);
-      break;
-    case 2:
-    default:
-      mouse_arbitrary_click2(button, rb_mouse_unwrap_point(argv[1]));
+    if (argc == 0) {
+        rb_raise(rb_eArgError, "arbitrary_click requires at least one arg");
+        return Qnil;
     }
 
-  return CURRENT_POSITION;
+    const uint_t button = NUM2INT(argv[0]);
+
+    switch (argc) {
+    case 1:
+        mouse_arbitrary_click(button);
+        break;
+    case 2:
+    default:
+        mouse_arbitrary_click2(button, rb_mouse_unwrap_point(argv[1]));
+    }
+
+    return CURRENT_POSITION;
 }
 
 /*
@@ -504,19 +498,18 @@ rb_mouse_arbitrary_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_middle_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_middle_click(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_middle_click();
-      break;
+        mouse_middle_click();
+        break;
     case 1:
     default:
-      mouse_middle_click(rb_mouse_unwrap_point(argv[0]));
+        mouse_middle_click2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -534,28 +527,27 @@ rb_mouse_middle_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_multi_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_multi_click(const int argc, VALUE* const argv, const VALUE self)
 {
 
-  if (argc == 0) {
-    rb_raise(rb_eArgError, "multi_click requires at least one arg");
-    return Qnil;
-  }
-
-  // TODO: there has got to be a more idiomatic way to do this coercion
-  size_t num_clicks = NUM2SIZET(argv[0]);
-
-  switch (argc)
-    {
-    case 1:
-      mouse_multi_click(num_clicks);
-      break;
-    case 2:
-    default:
-      mouse_multi_click2(num_clicks, rb_mouse_unwrap_point(argv[1]));
+    if (argc == 0) {
+        rb_raise(rb_eArgError, "multi_click requires at least one arg");
+        return Qnil;
     }
 
-  return CURRENT_POSITION;
+    // TODO: there has got to be a more idiomatic way to do this coercion
+    size_t num_clicks = NUM2SIZET(argv[0]);
+
+    switch (argc) {
+    case 1:
+        mouse_multi_click(num_clicks);
+        break;
+    case 2:
+    default:
+        mouse_multi_click2(num_clicks, rb_mouse_unwrap_point(argv[1]));
+    }
+
+    return CURRENT_POSITION;
 }
 
 /*
@@ -573,19 +565,18 @@ rb_mouse_multi_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_double_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_double_click(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_double_click();
-      break;
+        mouse_double_click();
+        break;
     case 1:
     default:
-      mouse_double_click2(rb_mouse_unwrap_point(argv[0]));
+        mouse_double_click2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -604,19 +595,18 @@ rb_mouse_double_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_triple_click(int argc, VALUE *argv, VALUE self)
+rb_mouse_triple_click(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_triple_click();
-      break;
+        mouse_triple_click();
+        break;
     case 1:
     default:
-      mouse_triple_click2(rb_mouse_unwrap_point(argv[0]));
+        mouse_triple_click2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 
@@ -633,19 +623,18 @@ rb_mouse_triple_click(int argc, VALUE *argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
+rb_mouse_smart_magnify(const int argc, VALUE* const argv, const VALUE self)
 {
-  switch (argc)
-    {
+    switch (argc) {
     case 0:
-      mouse_smart_magnify();
-      break;
+        mouse_smart_magnify();
+        break;
     case 1:
     default:
-      mouse_smart_magnify2(rb_mouse_unwrap_point(argv[0]));
+        mouse_smart_magnify2(rb_mouse_unwrap_point(argv[0]));
     }
 
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -664,41 +653,34 @@ rb_mouse_smart_magnify(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_swipe(int argc, VALUE* argv, VALUE self)
+rb_mouse_swipe(const int argc, VALUE* const argv, const VALUE self)
 {
-  if (!argc)
-    rb_raise(rb_eArgError, "wrong number of arguments (0 for 1+)");
+    if (!argc)
+        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1+)");
 
-  CGSwipeDirection direction;
-  VALUE direction_input = argv[0];
-  if (direction_input == sym_up)
-    direction = kCGSwipeDirectionUp;
-  else if (direction_input == sym_down)
-    direction = kCGSwipeDirectionDown;
-  else if (direction_input == sym_left)
-    direction = kCGSwipeDirectionLeft;
-  else if (direction_input == sym_right)
-    direction = kCGSwipeDirectionRight;
-  else
-    rb_raise(
-	     rb_eArgError,
-	     "invalid swipe direction `%s'",
-	     rb_id2name(SYM2ID(direction_input))
-	     );
+    const VALUE direction_input = argv[0];
+    CGSwipeDirection direction;
+    if (direction_input == sym_up)
+        direction = kCGSwipeDirectionUp;
+    else if (direction_input == sym_down)
+        direction = kCGSwipeDirectionDown;
+    else if (direction_input == sym_left)
+        direction = kCGSwipeDirectionLeft;
+    else if (direction_input == sym_right)
+        direction = kCGSwipeDirectionRight;
+    else
+        rb_raise(rb_eArgError,
+                 "invalid swipe direction `%s'",
+                 rb_id2name(SYM2ID(direction_input)));
 
-  if (argc == 1) {
-    mouse_swipe(direction);
-    return CURRENT_POSITION;
-  }
+    if (argc == 1) {
+      mouse_swipe(direction);
+      return CURRENT_POSITION;
+    }
 
-  CGPoint point = rb_mouse_unwrap_point(argv[1]);
-
-  if (argc == 2)
+    const CGPoint point = rb_mouse_unwrap_point(argv[1]);
     mouse_swipe2(direction, point);
-  else
-    mouse_swipe3(direction, point, NUM2DBL(argv[1]));
-
-  return CURRENT_POSITION;
+    return CURRENT_POSITION;
 }
 
 /*
@@ -730,45 +712,43 @@ rb_mouse_swipe(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
+rb_mouse_pinch(const int argc, VALUE* const argv, const VALUE self)
 {
-  if (!argc)
-    rb_raise(rb_eArgError, "wrong number of arguments (%d for 1+)", argc);
+    if (!argc)
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 1+)", argc);
 
-  VALUE            input_direction = argv[0];
-  CGPinchDirection       direction = kCGPinchNone;
+    const VALUE input_direction = argv[0];
+    CGPinchDirection  direction = kCGPinchNone;
 
-  if (input_direction == sym_expand || input_direction == sym_zoom)
-    direction = kCGPinchExpand;
-  else if (input_direction == sym_contract || input_direction == sym_unzoom)
-    direction = kCGPinchContract;
-  else
-    rb_raise(
-	     rb_eArgError,
-	     "invalid pinch direction `%s'",
-	     rb_id2name(SYM2ID(input_direction))
-	     );
+    if (input_direction == sym_expand || input_direction == sym_zoom)
+        direction = kCGPinchExpand;
+    else if (input_direction == sym_contract || input_direction == sym_unzoom)
+        direction = kCGPinchContract;
+    else
+        rb_raise(rb_eArgError,
+                 "invalid pinch direction `%s'",
+                 rb_id2name(SYM2ID(input_direction)));
 
-  if (argc == 1) {
-    mouse_pinch(direction);
+    if (argc == 1) {
+        mouse_pinch(direction);
+        return CURRENT_POSITION;
+    }
+
+    const double magnification = NUM2DBL(argv[1]);
+    if (argc == 2) {
+        mouse_pinch2(direction, magnification);
+        return CURRENT_POSITION;
+    }
+
+    const CGPoint point = rb_mouse_unwrap_point(argv[2]);
+    if (argc == 3) {
+        mouse_pinch3(direction, magnification, point);
+        return CURRENT_POSITION;
+    }
+
+    const double duration = NUM2DBL(argv[3]);
+    mouse_pinch4(direction, magnification, point, duration);
     return CURRENT_POSITION;
-  }
-
-  double magnification = NUM2DBL(argv[1]);
-  if (argc == 2) {
-    mouse_pinch2(direction, magnification);
-    return CURRENT_POSITION;
-  }
-
-  CGPoint point = rb_mouse_unwrap_point(argv[2]);
-  if (argc == 3) {
-    mouse_pinch3(direction, magnification, point);
-    return CURRENT_POSITION;
-  }
-
-  double duration = NUM2DBL(argv[3]);
-  mouse_pinch4(direction, magnification, point, duration);
-  return CURRENT_POSITION;
 }
 
 /*
@@ -798,47 +778,44 @@ rb_mouse_pinch(int argc, VALUE* argv, VALUE self)
  */
 static
 VALUE
-rb_mouse_rotate(int argc, VALUE* argv, VALUE self)
+rb_mouse_rotate(const int argc, VALUE* const argv, const VALUE self)
 {
-  if (argc < 2)
-    rb_raise(rb_eArgError, "wrong number of arguments (%d for 2+)", argc);
+    if (argc < 2)
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2+)", argc);
 
-  CGRotateDirection direction = kCGRotateNone;
-  VALUE             input_dir = argv[0];
-  if (
-      input_dir == sym_cw ||
-      input_dir == sym_clockwise ||
-      input_dir == sym_clock_wise
-      )
-    direction = kCGRotateClockwise;
-  else if (
-      input_dir == sym_ccw ||
-      input_dir == sym_counter_clockwise ||
-      input_dir == sym_counter_clock_wise
-	   )
-    direction = kCGRotateCounterClockwise;
-  else
-    rb_raise(
-	     rb_eArgError,
-	     "invalid rotation direction `%s'",
-	     rb_id2name(SYM2ID(input_dir))
-	     );
 
-  double angle = NUM2DBL(argv[1]);
+    const VALUE input_dir = argv[0];
+    CGRotateDirection direction;
 
-  if (argc == 2) {
-    mouse_rotate(direction, angle);
+    if      (input_dir == sym_cw ||
+             input_dir == sym_clockwise ||
+             input_dir == sym_clock_wise)
+        direction = kCGRotateClockwise;
+
+    else if (input_dir == sym_ccw ||
+             input_dir == sym_counter_clockwise ||
+             input_dir == sym_counter_clock_wise)
+        direction = kCGRotateCounterClockwise;
+    else
+        rb_raise(rb_eArgError,
+                 "invalid rotation direction `%s'",
+                 rb_id2name(SYM2ID(input_dir)));
+
+    const double angle = NUM2DBL(argv[1]);
+
+    if (argc == 2) {
+        mouse_rotate(direction, angle);
+        return CURRENT_POSITION;
+    }
+
+    const CGPoint point = rb_mouse_unwrap_point(argv[2]);
+    if (argc == 3) {
+        mouse_rotate2(direction, angle, point);
+        return CURRENT_POSITION;
+    }
+
+    mouse_rotate3(direction, angle, point, NUM2DBL(argv[3]));
     return CURRENT_POSITION;
-  }
-
-  CGPoint point = rb_mouse_unwrap_point(argv[2]);
-  if (argc == 3) {
-    mouse_rotate2(direction, angle, point);
-    return CURRENT_POSITION;
-  }
-
-  mouse_rotate3(direction, angle, point, NUM2DBL(argv[3]));
-  return CURRENT_POSITION;
 }
 
 /* @!endgroup */
@@ -847,81 +824,81 @@ rb_mouse_rotate(int argc, VALUE* argv, VALUE self)
 void
 Init_mouse()
 {
-  // on either supported Ruby, this should be defined by now
-  rb_cCGPoint = rb_const_get(rb_cObject, rb_intern("CGPoint"));
+    // on either supported Ruby, this should be defined by now
+    rb_cCGPoint = rb_const_get(rb_cObject, rb_intern("CGPoint"));
 
-  sel_x        = rb_intern("x");
-  sel_y        = rb_intern("y");
-  sel_to_point = rb_intern("to_point");
-  sel_new      = rb_intern("new");
+    sel_x        = rb_intern("x");
+    sel_y        = rb_intern("y");
+    sel_to_point = rb_intern("to_point");
+    sel_new      = rb_intern("new");
 
-  sym_pixel    = ID2SYM(rb_intern("pixel"));
-  sym_line     = ID2SYM(rb_intern("line"));
+    sym_pixel    = ID2SYM(rb_intern("pixel"));
+    sym_line     = ID2SYM(rb_intern("line"));
 
-  sym_up       = ID2SYM(rb_intern("up"));
-  sym_down     = ID2SYM(rb_intern("down"));
-  sym_left     = ID2SYM(rb_intern("left"));
-  sym_right    = ID2SYM(rb_intern("right"));
+    sym_up       = ID2SYM(rb_intern("up"));
+    sym_down     = ID2SYM(rb_intern("down"));
+    sym_left     = ID2SYM(rb_intern("left"));
+    sym_right    = ID2SYM(rb_intern("right"));
 
-  sym_zoom     = ID2SYM(rb_intern("zoom"));
-  sym_unzoom   = ID2SYM(rb_intern("unzoom"));
-  sym_expand   = ID2SYM(rb_intern("expand"));
-  sym_contract = ID2SYM(rb_intern("contract"));
+    sym_zoom     = ID2SYM(rb_intern("zoom"));
+    sym_unzoom   = ID2SYM(rb_intern("unzoom"));
+    sym_expand   = ID2SYM(rb_intern("expand"));
+    sym_contract = ID2SYM(rb_intern("contract"));
 
-  sym_cw                 = ID2SYM(rb_intern("cw"));
-  sym_clockwise          = ID2SYM(rb_intern("clockwise"));
-  sym_clock_wise         = ID2SYM(rb_intern("clock_wise"));
-  sym_ccw                = ID2SYM(rb_intern("ccw"));
-  sym_counter_clockwise  = ID2SYM(rb_intern("counter_clockwise"));
-  sym_counter_clock_wise = ID2SYM(rb_intern("counter_clock_wise"));
+    sym_cw                 = ID2SYM(rb_intern("cw"));
+    sym_clockwise          = ID2SYM(rb_intern("clockwise"));
+    sym_clock_wise         = ID2SYM(rb_intern("clock_wise"));
+    sym_ccw                = ID2SYM(rb_intern("ccw"));
+    sym_counter_clockwise  = ID2SYM(rb_intern("counter_clockwise"));
+    sym_counter_clock_wise = ID2SYM(rb_intern("counter_clock_wise"));
 
 
-  /*
-   * Document-module: Mouse
-   *
-   * A module with methods that "tap" into the system input methods.
-   * This is done by wrapping wrapping around the CoreGraphics event
-   * taps API provided by OS X.
-   *
-   * The module provides a simple Ruby interface to performing mouse
-   * interactions such as moving and clicking.
-   *
-   * This module can be used in a stand alone fashion or you can mix
-   * it into another class.
-   *
-   * [Reference](http://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html)
-   */
-  rb_mMouse = rb_define_module("Mouse");
+    /*
+     * Document-module: Mouse
+     *
+     * A module with methods that "tap" into the system input methods.
+     * This is done by wrapping wrapping around the CoreGraphics event
+     * taps API provided by OS X.
+     *
+     * The module provides a simple Ruby interface to performing mouse
+     * interactions such as moving and clicking.
+     *
+     * This module can be used in a stand alone fashion or you can mix
+     * it into another class.
+     *
+     * [Reference](http://developer.apple.com/library/mac/#documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html)
+     */
+    rb_mMouse = rb_define_module("Mouse");
 
-  rb_extend_object(rb_mMouse, rb_mMouse);
+    rb_extend_object(rb_mMouse, rb_mMouse);
 
-  rb_define_method(rb_mMouse, "current_position",     rb_mouse_current_position,      0);
-  rb_define_method(rb_mMouse, "move_to",              rb_mouse_move_to,              -1);
-  rb_define_method(rb_mMouse, "drag_to",              rb_mouse_drag_to,              -1);
-  rb_define_method(rb_mMouse, "scroll",               rb_mouse_scroll,               -1);
-  rb_define_method(rb_mMouse, "horizontal_scroll",    rb_mouse_horizontal_scroll,    -1);
-  rb_define_method(rb_mMouse, "click_down",           rb_mouse_click_down,           -1);
-  rb_define_method(rb_mMouse, "click_up",             rb_mouse_click_up,             -1);
-  rb_define_method(rb_mMouse, "click",                rb_mouse_click,                -1);
-  rb_define_method(rb_mMouse, "secondary_click_down", rb_mouse_secondary_click_down, -1);
-  rb_define_method(rb_mMouse, "secondary_click_up",   rb_mouse_secondary_click_up,   -1);
-  rb_define_method(rb_mMouse, "secondary_click",      rb_mouse_secondary_click,      -1);
-  rb_define_method(rb_mMouse, "middle_click",         rb_mouse_middle_click,         -1);
-  rb_define_method(rb_mMouse, "arbitrary_click_down", rb_mouse_arbitrary_click_down, -1);
-  rb_define_method(rb_mMouse, "arbitrary_click_up",   rb_mouse_arbitrary_click_up,   -1);
-  rb_define_method(rb_mMouse, "arbitrary_click",      rb_mouse_arbitrary_click,      -1);
-  rb_define_method(rb_mMouse, "multi_click",          rb_mouse_multi_click,          -1);
-  rb_define_method(rb_mMouse, "double_click",         rb_mouse_double_click,         -1);
-  rb_define_method(rb_mMouse, "triple_click",         rb_mouse_triple_click,         -1);
+    rb_define_method(rb_mMouse, "current_position",     rb_mouse_current_position,      0);
+    rb_define_method(rb_mMouse, "move_to",              rb_mouse_move_to,              -1);
+    rb_define_method(rb_mMouse, "drag_to",              rb_mouse_drag_to,              -1);
+    rb_define_method(rb_mMouse, "scroll",               rb_mouse_scroll,               -1);
+    rb_define_method(rb_mMouse, "horizontal_scroll",    rb_mouse_horizontal_scroll,    -1);
+    rb_define_method(rb_mMouse, "click_down",           rb_mouse_click_down,           -1);
+    rb_define_method(rb_mMouse, "click_up",             rb_mouse_click_up,             -1);
+    rb_define_method(rb_mMouse, "click",                rb_mouse_click,                -1);
+    rb_define_method(rb_mMouse, "secondary_click_down", rb_mouse_secondary_click_down, -1);
+    rb_define_method(rb_mMouse, "secondary_click_up",   rb_mouse_secondary_click_up,   -1);
+    rb_define_method(rb_mMouse, "secondary_click",      rb_mouse_secondary_click,      -1);
+    rb_define_method(rb_mMouse, "middle_click",         rb_mouse_middle_click,         -1);
+    rb_define_method(rb_mMouse, "arbitrary_click_down", rb_mouse_arbitrary_click_down, -1);
+    rb_define_method(rb_mMouse, "arbitrary_click_up",   rb_mouse_arbitrary_click_up,   -1);
+    rb_define_method(rb_mMouse, "arbitrary_click",      rb_mouse_arbitrary_click,      -1);
+    rb_define_method(rb_mMouse, "multi_click",          rb_mouse_multi_click,          -1);
+    rb_define_method(rb_mMouse, "double_click",         rb_mouse_double_click,         -1);
+    rb_define_method(rb_mMouse, "triple_click",         rb_mouse_triple_click,         -1);
 
-  rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
-  rb_define_method(rb_mMouse, "swipe",                rb_mouse_swipe,                -1);
-  rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
-  rb_define_method(rb_mMouse, "rotate",               rb_mouse_rotate,               -1);
+    rb_define_method(rb_mMouse, "smart_magnify",        rb_mouse_smart_magnify,        -1);
+    rb_define_method(rb_mMouse, "swipe",                rb_mouse_swipe,                -1);
+    rb_define_method(rb_mMouse, "pinch",                rb_mouse_pinch,                -1);
+    rb_define_method(rb_mMouse, "rotate",               rb_mouse_rotate,               -1);
 
-  rb_define_alias(rb_mMouse, "hscroll",               "horizontal_scroll");
-  rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");
-  rb_define_alias(rb_mMouse, "right_click_up",        "secondary_click_up");
-  rb_define_alias(rb_mMouse, "right_click",           "secondary_click");
-  rb_define_alias(rb_mMouse, "two_finger_double_tap", "smart_magnify");
+    rb_define_alias(rb_mMouse, "hscroll",               "horizontal_scroll");
+    rb_define_alias(rb_mMouse, "right_click_down",      "secondary_click_down");
+    rb_define_alias(rb_mMouse, "right_click_up",        "secondary_click_up");
+    rb_define_alias(rb_mMouse, "right_click",           "secondary_click");
+    rb_define_alias(rb_mMouse, "two_finger_double_tap", "smart_magnify");
 }

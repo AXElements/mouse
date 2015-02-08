@@ -43,6 +43,7 @@ end
 ##
 # Mouse extensions to `Array`
 class Array
+
   ##
   # Coerce the first two elements of the receiver into a {CGPoint}
   #
@@ -50,6 +51,7 @@ class Array
   def to_point
     CGPoint.new self[0], self[1]
   end
+
 end
 
 require 'mouse/version'
