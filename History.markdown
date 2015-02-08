@@ -1,3 +1,7 @@
+# 4.0.2 - Dash Docs 2
+
+  * Allow output directory and cache for Dash to use
+
 # 4.0.1 - Dash Docs
 
   * Use the default markdown provider when generating documentation
