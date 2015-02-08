@@ -1,6 +1,11 @@
 #include "mouser.h"
 #include "ruby.h"
 
+#ifndef UNUSED
+#define UNUSED __attribute__ ((unused))
+#endif
+
+
 static VALUE rb_mMouse, rb_cCGPoint;
 
 static ID sel_x, sel_y, sel_to_point, sel_new;
@@ -37,7 +42,7 @@ rb_mouse_unwrap_point(const VALUE maybe_point)
  */
 static
 VALUE
-rb_mouse_current_position(const VALUE self)
+rb_mouse_current_position(UNUSED const VALUE self)
 {
     return CURRENT_POSITION;
 }
@@ -57,12 +62,13 @@ rb_mouse_current_position(const VALUE self)
  */
 static
 VALUE
-rb_mouse_move_to(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_move_to(const int argc,
+                 VALUE* const argv,
+                 UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
         rb_raise(rb_eArgError, "move_to requires at least a one arg");
-        break;
     case 1:
         mouse_move_to(rb_mouse_unwrap_point(argv[0]));
         break;
@@ -82,12 +88,13 @@ rb_mouse_move_to(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_drag_to(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_drag_to(const int argc,
+                 VALUE* const argv,
+                 UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
         rb_raise(rb_eArgError, "drag_to requires at least a one arg");
-        break;
     case 1:
         mouse_drag_to(rb_mouse_unwrap_point(argv[0]));
         break;
@@ -126,7 +133,7 @@ rb_mouse_drag_to(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_scroll(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_scroll(const int argc, VALUE* const argv, UNUSED const VALUE self)
 {
     if (argc == 0 || argc > 3)
         rb_raise(rb_eArgError,
@@ -187,7 +194,9 @@ rb_mouse_scroll(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_horizontal_scroll(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_horizontal_scroll(const int argc,
+                           VALUE* const argv,
+                           UNUSED const VALUE self)
 {
     if (argc == 0 || argc > 3)
         rb_raise(rb_eArgError,
@@ -239,7 +248,9 @@ rb_mouse_horizontal_scroll(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_click_down(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_click_down(const int argc,
+                    VALUE* const argv,
+                    UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -271,7 +282,7 @@ rb_mouse_click_down(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_click_up(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_click_up(const int argc, VALUE* const argv, UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -300,7 +311,7 @@ rb_mouse_click_up(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_click(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_click(const int argc, VALUE* const argv, UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -335,7 +346,7 @@ static
 VALUE
 rb_mouse_secondary_click_down(const int argc,
                               VALUE* const argv,
-                              const VALUE self)
+                              UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -367,7 +378,9 @@ rb_mouse_secondary_click_down(const int argc,
  */
 static
 VALUE
-rb_mouse_secondary_click_up(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_secondary_click_up(const int argc,
+                            VALUE* const argv,
+                            UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -398,7 +411,9 @@ rb_mouse_secondary_click_up(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_secondary_click(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_secondary_click(const int argc,
+                         VALUE* const argv,
+                         UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -433,13 +448,13 @@ static
 VALUE
 rb_mouse_arbitrary_click_down(const int argc,
                               VALUE* const argv,
-                              const VALUE self)
+                              UNUSED const VALUE self)
 {
     if (argc == 0)
         rb_raise(rb_eArgError,
                  "arbitrary_click_down requires at least one arg");
 
-    const uint_t button = NUM2INT(argv[0]);
+    const uint_t button = NUM2UINT(argv[0]);
 
     switch (argc) {
     case 1:
@@ -473,13 +488,13 @@ static
 VALUE
 rb_mouse_arbitrary_click_up(const int argc,
                             VALUE* const argv,
-                            const VALUE self)
+                            UNUSED const VALUE self)
 {
     if (argc == 0)
         rb_raise(rb_eArgError,
                  "arbitrary_click_up requires at least one arg");
 
-    const uint_t button = NUM2INT(argv[0]);
+    const uint_t button = NUM2UINT(argv[0]);
 
     switch (argc) {
     case 1:
@@ -523,14 +538,14 @@ static
 VALUE
 rb_mouse_arbitrary_click(const int argc,
                          VALUE* const argv,
-                         const VALUE self)
+                         UNUSED const VALUE self)
 {
     if (argc == 0) {
         rb_raise(rb_eArgError, "arbitrary_click requires at least one arg");
         return Qnil;
     }
 
-    const uint_t button = NUM2INT(argv[0]);
+    const uint_t button = NUM2UINT(argv[0]);
 
     switch (argc) {
     case 1:
@@ -561,7 +576,9 @@ rb_mouse_arbitrary_click(const int argc,
  */
 static
 VALUE
-rb_mouse_middle_click(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_middle_click(const int argc,
+                      VALUE* const argv,
+                      UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -595,7 +612,9 @@ rb_mouse_middle_click(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_multi_click(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_multi_click(const int argc,
+                     VALUE* const argv,
+                     UNUSED const VALUE self)
 {
 
     if (argc == 0) {
@@ -637,7 +656,9 @@ rb_mouse_multi_click(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_double_click(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_double_click(const int argc,
+                      VALUE* const argv,
+                      UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -671,7 +692,9 @@ rb_mouse_double_click(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_triple_click(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_triple_click(const int argc,
+                      VALUE* const argv,
+                      UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -703,7 +726,9 @@ rb_mouse_triple_click(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_smart_magnify(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_smart_magnify(const int argc,
+                       VALUE* const argv,
+                       UNUSED const VALUE self)
 {
     switch (argc) {
     case 0:
@@ -743,7 +768,7 @@ rb_mouse_smart_magnify(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_swipe(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_swipe(const int argc, VALUE* const argv, UNUSED const VALUE self)
 {
     if (!argc)
         rb_raise(rb_eArgError, "wrong number of arguments (0 for 1+)");
@@ -815,7 +840,7 @@ rb_mouse_swipe(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_pinch(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_pinch(const int argc, VALUE* const argv, UNUSED const VALUE self)
 {
     if (!argc)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 1+)", argc);
@@ -891,7 +916,7 @@ rb_mouse_pinch(const int argc, VALUE* const argv, const VALUE self)
  */
 static
 VALUE
-rb_mouse_rotate(const int argc, VALUE* const argv, const VALUE self)
+rb_mouse_rotate(const int argc, VALUE* const argv, UNUSED const VALUE self)
 {
     if (argc < 2)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2+)", argc);
@@ -933,6 +958,8 @@ rb_mouse_rotate(const int argc, VALUE* const argv, const VALUE self)
 
 /* @!endgroup */
 
+
+void Init_mouse(void);
 
 void
 Init_mouse()

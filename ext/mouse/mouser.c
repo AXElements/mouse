@@ -8,8 +8,8 @@
 
 #include "mouser.h"
 
-static const uint_t FPS     = 240;
-static const uint_t QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
+static const double FPS     = 240;
+static const double QUANTUM = 1000000 / 240; // should be FPS, but GCC sucks
 static const double DEFAULT_DURATION      = 0.2; // seconds
 static const double DEFAULT_MAGNIFICATION = 1.0; // factor
 
@@ -18,7 +18,7 @@ static const double DEFAULT_MAGNIFICATION = 1.0; // factor
 #define POST(event) CGEventPost(kCGHIDEventTap, event)
 #define CHANGE(event,type) CGEventSetType(event, type)
 
-#define CLOSE_ENOUGH(a,b) ((abs(a.x - b.x) < 1.0) && (abs(a.y - b.y) < 1.0))
+#define CLOSE_ENOUGH(a, b) ((fabs(a.x - b.x) < 1.0) && (fabs(a.y - b.y) < 1.0))
 #define NOW (CFDateCreate(nil, CFAbsoluteTimeGetCurrent()))
 
 #define POSTRELEASE(x) {                        \
@@ -32,7 +32,7 @@ static
 void
 mouse_sleep(const uint_t quanta)
 {
-    usleep(quanta * QUANTUM);
+    usleep(quanta * (uint_t)QUANTUM);
 }
 
 CGPoint
@@ -63,10 +63,10 @@ mouse_animate(const CGEventType type,
 
     while (!CLOSE_ENOUGH(current_point, end_point)) {
         remaining  = end_point.x - current_point.x;
-        current_point.x += abs(xstep) > abs(remaining) ? remaining : xstep;
+        current_point.x += fabs(xstep) > fabs(remaining) ? remaining : xstep;
 
         remaining  = end_point.y - current_point.y;
-        current_point.y += abs(ystep) > abs(remaining) ? remaining : ystep;
+        current_point.y += fabs(ystep) > fabs(remaining) ? remaining : ystep;
 
         POSTRELEASE(NEW_EVENT(type, current_point, button));
 
