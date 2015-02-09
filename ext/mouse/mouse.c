@@ -11,10 +11,10 @@ static VALUE rb_mMouse, rb_cCGPoint;
 static ID sel_x, sel_y, sel_to_point, sel_new;
 
 static VALUE sym_pixel, sym_line,
-  sym_up, sym_down, sym_left, sym_right,
-  sym_zoom, sym_unzoom, sym_expand, sym_contract,
-  sym_cw, sym_clockwise, sym_clock_wise,
-  sym_ccw, sym_counter_clockwise, sym_counter_clock_wise;
+    sym_up, sym_down, sym_left, sym_right,
+    sym_zoom, sym_unzoom, sym_expand, sym_contract,
+    sym_cw, sym_clockwise, sym_clock_wise,
+    sym_ccw, sym_counter_clockwise, sym_counter_clock_wise;
 
 #define CURRENT_POSITION rb_mouse_wrap_point(mouse_current_position())
 
@@ -156,7 +156,7 @@ rb_mouse_scroll(const int argc, VALUE* const argv, UNUSED const VALUE self)
         else
             rb_raise(rb_eArgError,
                      "unknown units `%s'",
-                     rb_id2name(input_units));
+                     rb_id2name(SYM2ID(input_units)));
 
         if (argc == 2)
             mouse_scroll2(amt, units);
@@ -219,7 +219,7 @@ rb_mouse_horizontal_scroll(const int argc,
         else
             rb_raise(rb_eArgError,
                      "unknown units `%s'",
-                     rb_id2name(input_units));
+                     rb_id2name(SYM2ID(input_units)));
 
         if (argc == 2)
             mouse_horizontal_scroll2(amt, units);
