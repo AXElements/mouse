@@ -829,12 +829,12 @@ rb_mouse_swipe(const int argc, VALUE* const argv, UNUSED const VALUE self)
  * @overload pinch(direction, magnification, point)
  *   @param direction [Symbol]
  *   @param magnification [Float]
- *   @param point [CGPoint]
+ *   @param point [CGPoint,#to_point]
  *   @return [CGPoint]
  * @overload pinch(direction, magnification, point, duration)
  *   @param direction [Symbol]
  *   @param magnification [Float]
- *   @param point [CGPoint]
+ *   @param point [CGPoint,#to_point]
  *   @param duration [Float]
  *   @return [CGPoint]
  */
