@@ -147,7 +147,7 @@ rb_mouse_scroll(const int argc, VALUE* const argv, UNUSED const VALUE self)
 
     } else {
         const VALUE input_units = argv[1];
-        CGScrollEventUnit units;
+        CGScrollEventUnit units = kCGScrollEventUnitLine;
 
         if (input_units == sym_pixel)
             units = kCGScrollEventUnitPixel;
@@ -210,7 +210,7 @@ rb_mouse_horizontal_scroll(const int argc,
 
     } else {
         const VALUE input_units = argv[1];
-        CGScrollEventUnit units;
+        CGScrollEventUnit units = kCGScrollEventUnitLine;
 
         if (input_units == sym_pixel)
             units = kCGScrollEventUnitPixel;
@@ -774,7 +774,7 @@ rb_mouse_swipe(const int argc, VALUE* const argv, UNUSED const VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (0 for 1+)");
 
     const VALUE direction_input = argv[0];
-    CGSwipeDirection direction;
+    CGSwipeDirection direction = kCGSwipeDirectionNone;
     if (direction_input == sym_up)
         direction = kCGSwipeDirectionUp;
     else if (direction_input == sym_down)
