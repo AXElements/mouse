@@ -923,7 +923,7 @@ rb_mouse_rotate(const int argc, VALUE* const argv, UNUSED const VALUE self)
 
 
     const VALUE input_dir = argv[0];
-    CGRotateDirection direction;
+    CGRotateDirection direction = kCGRotateNone;
 
     if      (input_dir == sym_cw ||
              input_dir == sym_clockwise ||
