@@ -1,3 +1,8 @@
+# 4.0.3 - Fix Some Bugs
+
+  * Fix minor documentation issues
+  * Build against the system Ruby for Yosemite
+
 # 4.0.2 - Dash Docs 2
 
   * Allow output directory and cache for Dash to use
